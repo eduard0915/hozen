@@ -37,12 +37,42 @@ Tip 3: you can change the color of the sidebar with data-background-color="white
             </div>
         </div>
         <ul class="nav">
-            <li>
-                <a href="#">
-                    <i class="material-icons">hardware</i>
-                    <p>Equipos</p>
+            {% url 'start:start' as start %}
+<!--            {% url 'user:user_list' as user_list %}-->
+<!--            {% url 'user:user_create' as user_create %}-->
+<!--            {% url 'company:company_create' as company_create %}-->
+<!--            {% url 'company:company_list' as company_list %}-->
+<!--            {% url 'traceable:material_create' as material_create %}-->
+<!--            {% url 'traceable:material_list' as material_list %}-->
+
+            <li class="{% if start in request.path %} active {% endif %}">
+                <a href="{% url 'start:start' %}">
+                    <i class="material-icons">home</i>
+                    <p>Inicio</p>
                 </a>
             </li>
+<!--            <li class="{% if material_create in request.path or material_list in request.path %} active {% endif %}">-->
+            <li>
+                <a data-toggle="collapse" href="#equipment">
+                    <i class="material-icons">hardware</i>
+                    <p>Equipos
+                        <b class="caret"></b>
+                    </p>
+                </a>
+<!--                <div class="{% if material_create in request.path or material_list in request.path %} collapse in {% else %} collapse {% endif %}" id="materials">-->
+                <div class="#" id="equipment">
+                    <ul class="nav">
+<!--                        <li class="{% if material_list in request.path %} active {% endif %}">-->
+                        <li>
+                            <a href="#">Listado de Equipos</a>
+                        </li>
+                        <li>
+                            <a href="#">Registro de Equipos</a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+
         </ul>
     </div>
 </div>
