@@ -8,7 +8,7 @@ Tip 2: you can also add an image using data-image tag
 Tip 3: you can change the color of the sidebar with data-background-color="white | black"
 -->
     <div class="logo">
-        <a href="http://www.creative-tim.com" class="simple-text">
+        <a href="#" class="simple-text">
             HOZEN MANAGER
         </a>
     </div>
@@ -37,13 +37,8 @@ Tip 3: you can change the color of the sidebar with data-background-color="white
             </div>
         </div>
         <ul class="nav">
+
             {% url 'start:start' as start %}
-<!--            {% url 'user:user_list' as user_list %}-->
-<!--            {% url 'user:user_create' as user_create %}-->
-<!--            {% url 'company:company_create' as company_create %}-->
-<!--            {% url 'company:company_list' as company_list %}-->
-<!--            {% url 'traceable:material_create' as material_create %}-->
-<!--            {% url 'traceable:material_list' as material_list %}-->
 
             <li class="{% if start in request.path %} active {% endif %}">
                 <a href="{% url 'start:start' %}">
@@ -51,28 +46,30 @@ Tip 3: you can change the color of the sidebar with data-background-color="white
                     <p>Inicio</p>
                 </a>
             </li>
-<!--            <li class="{% if material_create in request.path or material_list in request.path %} active {% endif %}">-->
-            <li>
+
+            {% url 'equipment:create_equipment' as create_equipment %}
+            {% url 'equipment:list_equipment' as list_equipment %}
+
+            <li class="{% if create_equipment in request.path or list_equipment in request.path %} active {% endif %}">
                 <a data-toggle="collapse" href="#equipment">
                     <i class="material-icons">hardware</i>
                     <p>Equipos
                         <b class="caret"></b>
                     </p>
                 </a>
-<!--                <div class="{% if material_create in request.path or material_list in request.path %} collapse in {% else %} collapse {% endif %}" id="materials">-->
-                <div class="#" id="equipment">
+                <div class="{% if reate_equipment in request.path or list_equipment in request.pat %} collapse in {% else %} collapse {% endif %}"
+                     id="equipment">
                     <ul class="nav">
-<!--                        <li class="{% if material_list in request.path %} active {% endif %}">-->
+                        <li class="{% if list_equipment in request.path %} active {% endif %}">
                         <li>
-                            <a href="#">Listado de Equipos</a>
+                            <a href="{% url 'equipment:list_equipment' %}">Listado de Equipos</a>
                         </li>
-                        <li>
-                            <a href="#">Registro de Equipos</a>
+                        <li class="{% if create_equipment in request.path %} active {% endif %}">
+                            <a href="{% url 'equipment:create_equipment' %}">Registro de Equipos</a>
                         </li>
                     </ul>
                 </div>
             </li>
-
         </ul>
     </div>
 </div>

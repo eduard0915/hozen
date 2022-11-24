@@ -2,13 +2,13 @@ from django.conf.urls.static import static
 from django.urls import path
 
 from config import settings
-from core.start.views import StartView, NotPermsView
+from core.equipment.views import *
 
-app_name = 'start'
+app_name = 'equipment'
 
 urlpatterns = [
-    path('', StartView.as_view(), name='start'),
-    path('notperms/', NotPermsView.as_view(), name='notperms'),
+    path('add/', EquipmentCreateView.as_view(), name='create_equipment'),
+    path('list/', EquipmentListView.as_view(), name='list_equipment'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL,
