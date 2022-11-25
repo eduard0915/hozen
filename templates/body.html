@@ -24,6 +24,9 @@
     <link href="http://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css"
           href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons"/>
+    {% block head %}
+
+    {% endblock %}
 </head>
 
 <body>
@@ -37,6 +40,25 @@
 
         <div class="content">
             <div class="container-fluid">
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }} alert-with-icon">
+                            <i class="material-icons" data-notify="icon" >
+                                {% if message.tags == 'success' %}
+                                    check
+                                {% else %}
+                                    error_outline
+                                {% endif %}
+                            </i>
+                            {{ message }}
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">x</button>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+                {% block content %}
+
+
+                {% endblock %}
             </div>
         </div>
 

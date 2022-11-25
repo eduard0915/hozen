@@ -22,12 +22,14 @@ class Equipment(BaseModel):
     maker = models.CharField(max_length=100, verbose_name='Fabricante')
     date_manufactured = models.DateField(verbose_name='Fecha de Fabricación')
     date_entry = models.DateField(verbose_name='Fecha de Ingreso')
-    use_time = models.PositiveSmallIntegerField(verbose_name='Tiempo de Uso')
-    manufacturer_manual = models.FileField(verbose_name='Manual de Fabricante', null=True, blank=True)
-    manufacturer_docs = models.FileField(verbose_name='Documentos Anexos de Fabricante', null=True, blank=True)
+    use_time = models.PositiveSmallIntegerField(verbose_name='Tiempo de Uso', null=True, blank=True)
+    manufacturer_manual = models.FileField(
+        upload_to='equipment_manual/%Y%m%d', verbose_name='Manual de Fabricante', null=True, blank=True)
+    manufacturer_docs = models.FileField(
+        upload_to='equipment_docs/%Y%m%d', verbose_name='Documentos Anexos de Fabricante', null=True, blank=True)
     status = models.BooleanField(default=True, verbose_name='Estado')
     frequency_maintenance = models.SmallIntegerField(verbose_name='Frecuencia Mantenimiento', choices=FREQUENCY)
-    calibration = models.BooleanField(default=True, verbose_name='Requiere Calibración?')
+    calibration = models.BooleanField(default=False, verbose_name='Requiere Calibración?')
     frequency_calibration = models.SmallIntegerField(verbose_name='Frecuencia Calibración', choices=FREQUENCY, null=True, blank=True)
 
     def __str__(self):

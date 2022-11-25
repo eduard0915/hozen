@@ -57,11 +57,10 @@ Tip 3: you can change the color of the sidebar with data-background-color="white
                         <b class="caret"></b>
                     </p>
                 </a>
-                <div class="{% if reate_equipment in request.path or list_equipment in request.pat %} collapse in {% else %} collapse {% endif %}"
+                <div class="{% if create_equipment in request.path or list_equipment in request.path %} collapse in {% else %} collapse {% endif %}"
                      id="equipment">
                     <ul class="nav">
                         <li class="{% if list_equipment in request.path %} active {% endif %}">
-                        <li>
                             <a href="{% url 'equipment:list_equipment' %}">Listado de Equipos</a>
                         </li>
                         <li class="{% if create_equipment in request.path %} active {% endif %}">

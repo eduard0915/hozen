@@ -41,10 +41,11 @@ class EquipmentCreateView(CreateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = 'Creación de Equipo'
+        context['title'] = 'Registro de Equipo'
         context['list_url'] = self.success_url
         context['action'] = 'add'
-        context['entity'] = 'Creación de Equipo'
+        context['entity'] = 'Registro de Equipo'
+        context['div'] = '12'
         return context
 
 
@@ -83,5 +84,5 @@ class EquipmentListView(ListView):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Equipos'
         context['create_url'] = reverse_lazy('equipment:create_equipment')
-        context['entity'] = 'Equipos'
+        context['entity'] = 'Listado de Equipos'
         return context
