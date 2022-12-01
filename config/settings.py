@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 import os.path
 from pathlib import Path
 
+from decouple import config
 from django.contrib.messages import constants as message_constants
 
 
@@ -23,7 +24,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-i@ir%d_cu_1r3^)s_j#t&wgbl4n(+901pp*a+b-v#7ra64&4sk'
+SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -46,6 +47,8 @@ INSTALLED_APPS = [
     'core.homepage',
     'core.start',
     'core.equipment',
+    'core.user',
+    'core.login',
 ]
 
 MIDDLEWARE = [
@@ -144,13 +147,13 @@ STATICFILES_DIRS = [
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
-# AUTH_USER_MODEL = 'user.User'
+AUTH_USER_MODEL = 'user.User'
 
-# LOGIN_REDIRECT_URL = '/inicio/'
+LOGIN_REDIRECT_URL = '/start/'
 
-# LOGOUT_REDIRECT_URL = '/login/'
+LOGOUT_REDIRECT_URL = '/login/'
 
-# LOGIN_URL = '/login/'
+LOGIN_URL = '/login/'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 

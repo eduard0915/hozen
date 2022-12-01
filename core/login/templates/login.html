@@ -1,0 +1,58 @@
+{% extends 'base_login.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-4 col-sm-6 col-md-offset-4 col-sm-offset-3">
+            <form method="POST" action=".">
+                {% csrf_token %}
+                <div class="card card-login card-hidden">
+                    <div class="card-header text-center" data-background-color="rose">
+                        <h4 class="card-title">Login</h4>
+                    </div>
+                    {% if form.errors %}
+                        <div class="alert text-sm-left" role="alert">
+                            <div class="card-content" style="color: red">
+                                {% for field in form %}
+                                    {% for error in field.errors %}
+                                        {{ error }}
+                                    {% endfor %}
+                                {% endfor %}
+                                {% for error in form.non_field_errors %}
+                                    {{ error }}
+                                {% endfor %}
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span style="color: red" aria-hidden="true">X</span>
+                                </button>
+                            </div>
+                        </div>
+                    {% endif %}
+                    <div class="card-content">
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                                <i class="material-icons">face</i>
+                            </span>
+                            <div class="form-group label-floating">
+                                <label class="control-label">Usuario</label>
+                                {{ form.username | add_class:'form-control' | attr:'autocomplete:off' }}
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                                <i class="material-icons">lock_outline</i>
+                            </span>
+                            <div class="form-group label-floating">
+                                <label class="control-label">Contraseña</label>
+                                {{ form.password | add_class:'form-control' | attr:'autocomplete:off' }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="footer text-center">
+                        <button type="submit" class="btn btn-rose btn-simple btn-wd btn-lg">INICIAR SESIÓN</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}
