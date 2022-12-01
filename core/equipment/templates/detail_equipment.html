@@ -1,0 +1,35 @@
+{% extends 'body.html' %}
+{% load static %}
+
+{% block head %}
+
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-{{ div }}">
+            <div class="card">
+                {% block card_title %}
+
+                {% endblock %}
+                <div class="card-content">
+                    <h4 class="card-title">{{ entity }}</h4>
+
+
+                        <div class="card-footer text-center">
+                            <button type="submit" class="btn btn-success">
+                                <i class="material-icons">check</i>
+                                Guardar
+                            </button>
+                            <a href="{{ list_url }}" class="btn btn-danger btn-fill">
+                                <i class="material-icons">close</i>
+                                Cancelar
+                            </a>
+                        </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}

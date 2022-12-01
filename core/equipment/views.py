@@ -1,5 +1,5 @@
 from django.contrib import messages
-# from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import JsonResponse
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
@@ -8,15 +8,16 @@ from django.views.generic import CreateView, ListView, DetailView, UpdateView
 
 from core.equipment.forms import EquipmentForm
 from core.equipment.models import Equipment
+from core.mixins import ValidatePermissionRequiredMixin
 
 
 # Registro de equipo
-class EquipmentCreateView(CreateView):
+class EquipmentCreateView(LoginRequiredMixin, ValidatePermissionRequiredMixin, CreateView):
     model = Equipment
     form_class = EquipmentForm
     template_name = 'create_equipment.html'
     success_url = reverse_lazy('equipment:list_equipment')
-    # permission_required = 'materials.add_suppliermaterial'
+    permission_required = 'equipment.add_equipment'
     url_redirect = success_url
 
     @method_decorator(csrf_exempt)
@@ -51,10 +52,10 @@ class EquipmentCreateView(CreateView):
 
 
 # Listado de Proveedores
-class EquipmentListView(ListView):
+class EquipmentListView(LoginRequiredMixin, ValidatePermissionRequiredMixin, ListView):
     model = Equipment
     template_name = 'list_equipment.html'
-    # permission_required = 'materials.view_suppliermaterial'
+    permission_required = 'equipment.view_equipment'
 
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
@@ -90,12 +91,12 @@ class EquipmentListView(ListView):
 
 
 # Edición de Registro de equipo
-class EquipmentUpdateView(UpdateView):
+class EquipmentUpdateView(LoginRequiredMixin, ValidatePermissionRequiredMixin, UpdateView):
     model = Equipment
     form_class = EquipmentForm
     template_name = 'create_equipment.html'
     success_url = reverse_lazy('equipment:list_equipment')
-    # permission_required = 'materials.add_suppliermaterial'
+    permission_required = 'equipment.change_equipment'
     url_redirect = success_url
 
     def __init__(self, **kwargs):
@@ -129,5 +130,26 @@ class EquipmentUpdateView(UpdateView):
         context['list_url'] = self.success_url
         context['action'] = 'edit'
         context['entity'] = 'Edición de Registro de Equipo'
+        context['div'] = '12'
+        return context
+
+
+# Detalle de Equipo
+class EquipmentDetailView(LoginRequiredMixin, ValidatePermissionRequiredMixin, DetailView):
+    model = Equipment
+    template_name = 'detail_equipment.html'
+    permission_required = 'equipment.view_equipment'
+
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_queryset(self):
+        return super(EquipmentDetailView, self).get_queryset()
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Hoja de Vida de Equipo'
+        context['entity'] = 'Hoja de Vida de Equipo'
+        context['list_url'] = reverse_lazy('traceable:material_list')
         context['div'] = '12'
         return context
