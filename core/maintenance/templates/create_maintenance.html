@@ -1,0 +1,16 @@
+{% extends 'form_one.html' %}
+
+
+{% block card_title %}
+
+    <div class="card-header card-header-icon" data-background-color="rose">
+        <i class="material-icons">
+            {% if action == 'add' %}
+                add_box
+            {% else %}
+                edit_box
+            {% endif %}
+        </i>
+    </div>
+
+{% endblock %}

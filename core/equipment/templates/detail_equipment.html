@@ -9,25 +9,133 @@
     <div class="row">
         <div class="col-md-{{ div }}">
             <div class="card">
-                {% block card_title %}
-
-                {% endblock %}
+                <div class="card-header card-header-icon" data-background-color="rose">
+                    <i class="material-icons">display_settings</i>
+                </div>
                 <div class="card-content">
                     <h4 class="card-title">{{ entity }}</h4>
-
-
-                        <div class="card-footer text-center">
-                            <button type="submit" class="btn btn-success">
-                                <i class="material-icons">check</i>
-                                Guardar
-                            </button>
-                            <a href="{{ list_url }}" class="btn btn-danger btn-fill">
-                                <i class="material-icons">close</i>
-                                Cancelar
-                            </a>
+                    <div class="row">
+                        <div class="card-content">
+                            <ul class="nav nav-pills nav-pills-warning">
+                                <li class="active">
+                                    <a href="#pill1" data-toggle="tab">Generalidades</a>
+                                </li>
+                                <li>
+                                    <a href="#pill2" data-toggle="tab">Mantenimientos</a>
+                                </li>
+                                <li>
+                                    <a href="#pill3" data-toggle="tab">Cambio de Piezas</a>
+                                </li>
+                            </ul>
+                            <div class="tab-content">
+                                <div class="tab-pane active" id="pill1">
+                                    <div class="row">
+                                        <div class="col-md-1">
+                                            <p class="description">Código</p>
+                                            {{ object.code }}
+                                        </div>
+                                        <div class="col-md-3">
+                                            <p class="description">Descripción</p>
+                                            {{ object.description }}
+                                        </div>
+                                        <div class="col-md-2">
+                                            <p class="description">Fabricante</p>
+                                            {{ object.maker }}
+                                        </div>
+                                        <div class="col-md-2">
+                                            <p class="description">Serial</p>
+                                            {{ object.serial }}
+                                        </div>
+                                        <div class="col-md-2">
+                                            <p class="description">Fecha de Ingreso</p>
+                                            {{ object.date_entry }}
+                                        </div>
+                                        <div class="col-md-2">
+                                            <p class="description">Tiempo de Uso</p>
+                                            {{ object.use_time }} años
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <p class="description">Mantenimiento</p>
+                                            Cada {{ object.frequency_maintenance }} meses
+                                        </div>
+                                        <div class="col-md-2">
+                                            <p class="description">Estado</p>
+                                            {% if object.status == True %}
+                                                En Servicio
+                                            {% else %}
+                                                Fuera de Servicio
+                                            {% endif %}
+                                        </div>
+                                        <div class="col-md-1">
+                                            <p class="description">Activo Fijo</p>
+                                            {{ object.fix_active }}
+                                        </div>
+                                        <div class="col-md-2">
+                                            <p class="description">Fecha de Ingreso</p>
+                                            {{ object.date_entry }}
+                                        </div>
+                                        <div class="col-md-2">
+                                            <p class="description">Calibración</p>
+                                            {% if object.calibration == True %}
+                                                Requiere
+                                            {% else %}
+                                                No Requiere
+                                            {% endif %}
+                                        </div>
+                                        {% if object.calibration == True %}
+                                            <div class="col-md-2">
+                                                <p class="description">Frecuencia Calibración</p>
+                                                Cada {{ object.frequency_calibration }} meses
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                    <br>
+                                    <div class="row">
+                                        {% if object.manufacturer_manual %}
+                                            <div class="col-md-2">
+                                                <a href="/equipment/manufacturer_manual?id={{ object.id }}&type=manufacturer_manual" type="button" class="btn btn-rose btn-round" target="_blank">
+                                                    Manual Fabricante
+                                                </a>
+                                            </div>
+                                        {% endif %}
+                                        {% if object.manufacturer_docs %}
+                                            <div class="col-md-2">
+                                                <a href="/equipment/manufacturer_docs?id={{ object.id }}&type=manufacturer_docs" type="button" class="btn btn-rose btn-round" target="_blank">
+                                                    Documentos Anexos
+                                                </a>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="tab-pane" id="pill2">
+                                    Efficiently unleash cross-media information without cross-media value. Quickly
+                                    maximize timely deliverables for real-time schemas.
+                                    <br/>
+                                    <br/>Dramatically maintain clicks-and-mortar solutions without functional solutions.
+                                </div>
+                                <div class="tab-pane" id="pill3">
+                                    Completely synergize resource taxing relationships via premier niche markets.
+                                    Professionally cultivate one-to-one customer service with robust ideas.
+                                    <br/>
+                                    <br/>Dynamically innovate resource-leveling customer service for state of the art
+                                    customer service.
+                                </div>
+                            </div>
                         </div>
+
+                    </div>
+                    <br>
+                    <div class="card-footer text-left">
+                        <a href="{{ list_url }}" class="btn btn-danger btn-fill">
+                            <i class="material-icons">arrow_back</i>
+                            Atrás
+                        </a>
+                    </div>
                 </div>
-            </div>
+        </div>
         </div>
     </div>
 

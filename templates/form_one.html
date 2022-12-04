@@ -43,7 +43,7 @@
                                     <div class="fileinput-preview fileinput-exists thumbnail"></div>
                                     <div>
                                     <span class="btn btn-rose btn-round btn-file">
-                                        <span class="fileinput-new">Seleccionar Archivo</span>
+                                        <span class="fileinput-new">{{ field.label }}</span>
                                         <span class="fileinput-exists">Cambiar</span>
                                         {{ field }}
                                     </span>
@@ -142,6 +142,35 @@
                 close: 'fa fa-remove',
             },
         });
+
+        $('#date_maintenance').datetimepicker({
+            format: 'YYYY-MM-DD',
+            locale: 'es',
+            defaultDate: $('.date_maintenance'),
+            icons: {
+                time: "fa fa-clock-o",
+                date: "fa fa-calendar",
+                up: "fa fa-chevron-up",
+                down: "fa fa-chevron-down",
+                previous: 'fa fa-chevron-left',
+                next: 'fa fa-chevron-right',
+                today: 'fa fa-screenshot',
+                clear: 'fa fa-trash',
+                close: 'fa fa-remove',
+            },
+        });
+
+        // Ocultar frecuencia de calibración de acuerdo a si requiere o no
+        {#let ocultar = document.getElementById('id_calibration');#}
+        {#if (ocultar) ocultar.addEventListener('change', e => {#}
+        {#    if (e.target.value === true) {#}
+        {#        document.getElementById('id_frequency_calibration').style.display = 'none';#}
+        {#        $('label[for="id_frequency_calibration"]').hide();#}
+        {#     } else {#}
+        {#        document.getElementById('id_frequency_calibration').style.display = 'block';#}
+        {#        $('label[for="id_frequency_calibration"]').show();#}
+        {#    }#}
+        {# })#}
 
     </script>
 {% endblock %}

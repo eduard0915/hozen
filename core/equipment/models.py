@@ -1,8 +1,9 @@
+from datetime import date
+
 from crum import get_current_user
 from django.db import models
 
 from core.models import BaseModel
-
 
 FREQUENCY = [
     (3, 3),
@@ -14,6 +15,7 @@ FREQUENCY = [
 ]
 
 
+# Equipos
 class Equipment(BaseModel):
     code = models.CharField(max_length=30, verbose_name='Código')
     description = models.CharField(max_length=200, verbose_name='Descripción')
@@ -22,7 +24,7 @@ class Equipment(BaseModel):
     maker = models.CharField(max_length=100, verbose_name='Fabricante')
     date_manufactured = models.DateField(verbose_name='Fecha de Fabricación')
     date_entry = models.DateField(verbose_name='Fecha de Ingreso')
-    use_time = models.PositiveSmallIntegerField(verbose_name='Tiempo de Uso', null=True, blank=True)
+    use_time = models.FloatField(verbose_name='Tiempo de Uso')
     manufacturer_manual = models.FileField(
         upload_to='equipment_manual/%Y%m%d', verbose_name='Manual de Fabricante', null=True, blank=True)
     manufacturer_docs = models.FileField(
@@ -41,6 +43,10 @@ class Equipment(BaseModel):
         verbose_name_plural = 'Equipments'
 
     def save(self, force_insert=False, force_update=False, using=None, update_fields=None, *args, **kwargs):
+        today = date.today()
+        diff_days = today - self.date_manufactured
+        months = float(diff_days.days/365)
+        self.use_time = round(months, 1)
         user = get_current_user()
         if user is not None:
             if not self.pk:

@@ -12,6 +12,7 @@ class EquipmentForm(ModelForm):
 
     class Meta:
         model = Equipment
+        CHOICES_SELECT = [(True, 'Si'), (False, 'No')]
         fields = [
             'code',
             'description',
@@ -35,7 +36,7 @@ class EquipmentForm(ModelForm):
             'maker': TextInput(attrs={'class': 'form-control', 'required': True}),
             'fix_active': TextInput(attrs={'class': 'form-control', 'required': True}),
             'frequency_maintenance': Select(attrs={'class': 'form-control', 'required': True}),
-            'calibration': NullBooleanSelect(attrs={'class': 'form-control', 'required': True}),
+            'calibration': Select(attrs={'class': 'form-control', 'required': True}, choices=CHOICES_SELECT),
             'manufacturer_manual': FileInput(),
             'manufacturer_docs': FileInput(),
             'frequency_calibration': Select(attrs={'class': 'form-control'}),
@@ -61,7 +62,10 @@ class EquipmentForm(ModelForm):
         form = super()
         try:
             if form.is_valid():
-                data = form.save()
+                data = form.save(commit=False)
+                if not data.calibration:
+                    data.frequency_calibration = None
+                data.save()
             else:
                 data['error'] = form.errors
         except Exception as e:

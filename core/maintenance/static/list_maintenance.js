@@ -16,33 +16,17 @@ $(function () {
             dataSrc: ""
         },
         columns: [
-            {'data': 'code'},
-            {'data': 'description'},
-            {'data': 'serial'},
-            {'data': 'fix_active'},
-            {'data': 'status'},
+            {'data': 'maintenance_number'},
+            {'data': 'equipment'},
+            {'data': 'date_maintenance'},
+            {'data': 'maintenance_type'},
+            {'data': 'made_by'},
             {'data': 'id'},
         ],
         columnDefs: [
             {
-                targets: [0, 1, 2, 3],
+                targets: [0, 1, 2, 3, 4],
                 class: 'td-actions text-center'
-            },
-            {
-                targets: [4],
-                className: 'td-actions text-center',
-                render: function (data, type, row) {
-                    let estado = null
-                    switch (row['status']) {
-                        case true:
-                            estado = 'Activo'
-                            break;
-                        case false:
-                            estado = 'Inactivo'
-                            break;
-                    }
-                    return estado;
-                }
             },
             {
                 targets: [5],
