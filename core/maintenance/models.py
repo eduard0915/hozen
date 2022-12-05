@@ -29,16 +29,16 @@ def increment_number_maintenance():
 # Mantenimiento
 class Maintenance(BaseModel):
     maintenance_number = models.CharField(max_length=30, verbose_name='', default=increment_number_maintenance)
-    maintenance_type = models.CharField(max_length=30, verbose_name='Tipo de Mantenimiento', choices=TYPE)
+    maintenance_type = models.CharField(max_length=30, verbose_name='Tipo de Mantenimiento')
     date_maintenance = models.DateField(verbose_name='Fecha')
-    date_maintenance_next = models.DateField()
+    date_maintenance_next = models.DateField(null=True, blank=True)
     physical_record = models.FileField(
         upload_to='physical_record/%Y%m%d', verbose_name='Registro Físico', null=True, blank=True)
     description_maintenance = models.TextField(verbose_name='Detalle de Mantenimiento')
     chances_pieces = models.TextField(verbose_name='Piezas o Partes Reemplazadas')
     equipment = models.ForeignKey(Equipment, verbose_name='Equipo', on_delete=models.CASCADE)
     made_by = models.ForeignKey(User, verbose_name='Realizado por', on_delete=models.CASCADE)
-    contractor = models.CharField(max_length=300, verbose_name='Contratista')
+    contractor = models.CharField(max_length=300, verbose_name='Contratista', null=True, blank=True)
 
     def __str__(self):
         return self.maintenance_number

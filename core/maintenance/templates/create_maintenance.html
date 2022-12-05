@@ -1,16 +1,179 @@
-{% extends 'form_one.html' %}
+{% extends 'body.html' %}
+{% load static %}
 
 
-{% block card_title %}
+{% block head %}
 
-    <div class="card-header card-header-icon" data-background-color="rose">
-        <i class="material-icons">
-            {% if action == 'add' %}
-                add_box
-            {% else %}
-                edit_box
-            {% endif %}
-        </i>
+    <script src="{% static 'lib/material-dashboard-pro-html-v1.1.0/assets/js/jquery-3.1.1.min.js' %}"></script>
+    <script src="{% static 'lib/material-dashboard-pro-html-v1.1.0/assets/js/material.min.js' %}" type="text/javascript"></script>
+    <script src="{% static 'lib/material-dashboard-pro-html-v1.1.0/assets/js/moment.min.js' %}"></script>
+    <script src="{% static 'lib/moment-es/es.js' %}"></script>
+    <script src="{% static 'lib/material-dashboard-pro-html-v1.1.0/assets/js/bootstrap-datetimepicker.js' %}"></script>
+
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-{{ div }}">
+            <div class="card">
+                <div class="card-header card-header-icon" data-background-color="rose">
+                    <i class="material-icons">
+                        {% if action == 'add' %}
+                            add_box
+                        {% else %}
+                            edit_box
+                        {% endif %}
+                    </i>
+                </div>
+                <div class="card-content">
+                    <h4 class="card-title">{{ entity }}</h4>
+                    <form enctype="multipart/form-data" method="post" action="" class="form-horizontal">
+                        <input type="hidden" name="action" value="{{ action }}">
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="col-md-2">
+                                <div class="form-group label-floating">
+                                    <label for="id_maintenance_number" class="control-label">N° de Mantenimiento</label>
+                                        {{ form.maintenance_number }}
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group label-floating">
+                                    <label for="id_date_maintenance" class="control-label">Fecha</label>
+                                        {{ form.date_maintenance }}
+                                </div>
+                            </div>
+                            <div class="col-md-8">
+                                <label for="id_equipment">Equipo</label>
+                                <select name="equipment" id="id_equipment" class="col-md-12">
+                                    <option value="">Buscar</option>
+                                    {% for eq in equipment %}
+                                        <option value="{{ eq.id }}">{{ eq.code }} {{ eq.description }} {{ eq.maker }}, serial: {{ eq.serial }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-2">
+                                <div class="form-group label-floating">
+                                    <label for="id_maintenance_type" class="control-label">Tipo de Mantenimiento</label>
+                                    <select id="id_maintenance_type" name="maintenance_type" class="selectpicker" data-style="select-with-transition" title="Seleccionar" data-size="7">
+                                        <option value="Correctivo">Correctivo</option>
+                                        <option value="Preventivo">Preventivo</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group label-floating">
+                                    <label for="id_made_by" class="control-label">Realizado por</label>
+                                    <select name="made_by" id="id_made_by" class="selectpicker" data-style="select-with-transition" title="Seleccionar" data-size="7">
+                                        {% for user in users %}
+                                            <option value="{{ user.id }}">{{ user.get_full_name }}, {{ user.cargo }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group label-floating">
+                                    <label for="id_contractor" class="control-label">Contratista</label>
+                                        {{ form.contractor }}
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                            <div class="fileinput fileinput-new text-center" data-provides='fileinput'>
+                                <div class="fileinput-preview fileinput-exists thumbnail"></div>
+                                <div>
+                                    <span class="btn btn-rose btn-round btn-file">
+                                        <span class="fileinput-new">Registro Físico</span>
+                                        <span class="fileinput-exists">Cambiar</span>
+                                        {{ form.physical_record }}
+                                    </span>
+                                    <a href="#" class="btn btn-danger btn-round fileinput-exists"
+                                       data-dismiss="fileinput"><i class="fa fa-times"></i> Eliminar</a>
+                                </div>
+                            </div>
+                        </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-7">
+                                <div class="form-group label-floating">
+                                    <label for="id_description_maintenance" class="control-label">Descripción del Mantenimiento</label>
+                                        {{ form.description_maintenance }}
+                                </div>
+                            </div>
+                            <div class="col-md-5">
+                                <div class="form-group label-floating">
+                                    <label for="id_chances_pieces" class="control-label">Cambio de Piezas o Partes</label>
+                                        {{ form.chances_pieces }}
+                                </div>
+                            </div>
+                        </div>
+
+                            <div class="card-footer text-center">
+                                <button type="submit" class="btn btn-success">
+                                    <i class="material-icons">check</i>
+                                    Guardar
+                                </button>
+                                <a href="{{ list_url }}" class="btn btn-danger btn-fill">
+                                    <i class="material-icons">close</i>
+                                    Cancelar
+                                </a>
+                            </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
 
+    <script type="text/javascript">
+
+        $('form').on('submit', function (e) {
+            e.preventDefault();
+            var parameters = new FormData(this);
+            $.ajax({
+                url: window.location.pathname,
+                type: 'POST',
+                data: parameters,
+                dataType: 'json',
+                processData: false,
+                contentType: false,
+            }).done(function (data) {
+                console.log(data);
+                if (!data.hasOwnProperty('error')) {
+                    location.href = '{{ list_url }}';
+                    return false;
+                }
+                message_error(data.error);
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+                alert(textStatus + ': ' + errorThrown);
+            }).always(function (data) {
+            });
+        });
+
+        $('#date_maintenance').datetimepicker({
+            format: 'YYYY-MM-DD',
+            locale: 'es',
+            defaultDate: $('.date_maintenance'),
+            icons: {
+                time: "fa fa-clock-o",
+                date: "fa fa-calendar",
+                up: "fa fa-chevron-up",
+                down: "fa fa-chevron-down",
+                previous: 'fa fa-chevron-left',
+                next: 'fa fa-chevron-right',
+                today: 'fa fa-screenshot',
+                clear: 'fa fa-trash',
+                close: 'fa fa-remove',
+            },
+        });
+
+        $(document).ready(function () {
+            $('#id_equipment').select2({
+                theme: "bootstrap4",
+                language: 'es',
+                placeholder: 'Buscar',
+            })
+        });
+
+    </script>
 {% endblock %}

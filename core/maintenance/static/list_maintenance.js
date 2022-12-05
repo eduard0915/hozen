@@ -4,6 +4,7 @@ $(function () {
         autoWidth: false,
         destroy: true,
         deferRender: true,
+        order: [[ 5, "desc" ]],
         language: {
             url: "//cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json"
         },
@@ -25,8 +26,24 @@ $(function () {
         ],
         columnDefs: [
             {
-                targets: [0, 1, 2, 3, 4],
+                targets: [0, 2, 3],
                 class: 'td-actions text-center'
+            },
+            {
+                targets: [1],
+                class: 'td-actions text-center',
+                orderable: false,
+                render: function (data, type, row) {
+                    return row['equipment__code'] + ' ' + row['equipment__description'] + ', serial: ' + row['equipment__serial']
+                }
+            },
+            {
+                targets: [4],
+                class: 'td-actions text-center',
+                orderable: false,
+                render: function (data, type, row) {
+                    return row['made_by__first_name'] + ' ' + row['made_by__last_name'] + ', ' + row['made_by__cargo']
+                }
             },
             {
                 targets: [5],

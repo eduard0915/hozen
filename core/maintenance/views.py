@@ -6,16 +6,18 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import CreateView, ListView
 
+from core.equipment.models import Equipment
 from core.maintenance.forms import MaintenanceForm
 from core.maintenance.models import Maintenance
 from core.mixins import ValidatePermissionRequiredMixin
+from core.user.models import User
 
 
 # Registro de mantenimiento
 class MaintenanceCreateView(LoginRequiredMixin, ValidatePermissionRequiredMixin, CreateView):
     model = Maintenance
     form_class = MaintenanceForm
-    template_name = 'create_equipment.html'
+    template_name = 'create_maintenance.html'
     success_url = reverse_lazy('maintenance:list_maintenance')
     permission_required = 'equipment.add_equipment'
     url_redirect = success_url
@@ -43,6 +45,8 @@ class MaintenanceCreateView(LoginRequiredMixin, ValidatePermissionRequiredMixin,
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context['equipment'] = Equipment.objects.all()
+        context['users'] = User.objects.all()
         context['title'] = 'Registro de Mantenimiento'
         context['list_url'] = self.success_url
         context['action'] = 'add'
@@ -67,14 +71,19 @@ class MaintenanceListView(LoginRequiredMixin, ValidatePermissionRequiredMixin, L
             action = request.POST['action']
             if action == 'searchdata':
                 data = []
-                equip = list(Maintenance.objects.values(
+                equip = list(Maintenance.objects.select_related('equipment', 'made_by').values(
                     'id',
                     'maintenance_number',
                     'maintenance_type',
                     'date_maintenance',
+                    'equipment',
                     'equipment__code',
                     'equipment__description',
+                    'equipment__serial',
                     'made_by',
+                    'made_by__first_name',
+                    'made_by__last_name',
+                    'made_by__cargo',
                     'contractor',
                 ).order_by('-id'))
                 return JsonResponse(equip, safe=False)

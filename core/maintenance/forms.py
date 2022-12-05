@@ -25,23 +25,19 @@ class MaintenanceForm(ModelForm):
         ]
         widgets = {
             'maintenance_number': TextInput(attrs={'class': 'form-control', 'required': True}),
-            'contractor': TextInput(attrs={'class': 'form-control', 'required': True}),
-            'chances_pieces': TextInput(attrs={'class': 'form-control', 'required': True}),
-            'description_maintenance': TextInput(attrs={'class': 'form-control', 'required': True}),
+            'contractor': TextInput(attrs={'class': 'form-control'}),
+            'equipment': Select(attrs={'class': 'form-control', 'required': True}),
+            'chances_pieces': Textarea(attrs={'class': 'form-control', 'required': True, 'rows': 3}),
+            'description_maintenance': Textarea(attrs={'class': 'form-control', 'required': True, 'rows': 3}),
             'physical_record': FileInput(),
             'maintenance_type': Select(attrs={'class': 'form-control', 'required': True}),
             'made_by': Select(attrs={'class': 'form-control'}),
             'date_maintenance': DateInput(format='%Y-%m-%d', attrs={
-                'id': 'date_manufactured',
+                'id': 'date_maintenance',
                 'class': 'form-control datepicker',
                 'required': True
             })
         }
-
-        # help_texts = {
-        #     'frequency_maintenance': 'Meses',
-        #     'frequency_calibration': 'Meses',
-        # }
 
     def save(self, commit=True):
         data = {}

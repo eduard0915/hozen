@@ -4,6 +4,7 @@ $(function () {
         autoWidth: false,
         destroy: true,
         deferRender: true,
+        order: [[ 5, "desc" ]],
         language: {
             url: "//cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json"
         },
@@ -18,6 +19,7 @@ $(function () {
         columns: [
             {'data': 'code'},
             {'data': 'description'},
+            {'data': 'maker'},
             {'data': 'serial'},
             {'data': 'fix_active'},
             {'data': 'status'},
@@ -25,27 +27,27 @@ $(function () {
         ],
         columnDefs: [
             {
-                targets: [0, 1, 2, 3],
+                targets: [0, 1, 2, 3, 4],
                 class: 'td-actions text-center'
             },
             {
-                targets: [4],
+                targets: [5],
                 className: 'td-actions text-center',
                 render: function (data, type, row) {
                     let estado = null
                     switch (row['status']) {
                         case true:
-                            estado = 'Activo'
+                            estado = 'En Servicio'
                             break;
                         case false:
-                            estado = 'Inactivo'
+                            estado = 'Fuera de Servicio'
                             break;
                     }
                     return estado;
                 }
             },
             {
-                targets: [5],
+                targets: [6],
                 class: 'td-actions text-center',
                 orderable: false,
                 render: function (data, type, row) {

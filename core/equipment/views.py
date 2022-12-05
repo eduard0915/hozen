@@ -82,6 +82,7 @@ class EquipmentListView(LoginRequiredMixin, ValidatePermissionRequiredMixin, Lis
                     'serial',
                     'fix_active',
                     'status',
+                    'maker'
                 ).order_by('-id'))
                 return JsonResponse(equip, safe=False)
             else:
