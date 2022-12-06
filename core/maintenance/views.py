@@ -65,7 +65,8 @@ class MaintenanceListView(LoginRequiredMixin, ValidatePermissionRequiredMixin, L
     def dispatch(self, request, *args, **kwargs):
         return super().dispatch(request, *args, **kwargs)
 
-    def post(self, request, *args, **kwargs):
+    @staticmethod
+    def post(request, *args, **kwargs):
         data = {}
         try:
             action = request.POST['action']
