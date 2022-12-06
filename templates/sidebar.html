@@ -93,6 +93,30 @@ Tip 3: you can change the color of the sidebar with data-background-color="white
                     </ul>
                 </div>
             </li>
+
+
+            {% url 'user:user_create' as create_user %}
+            {% url 'user:user_list' as list_user %}
+
+            <li class="{% if create_user in request.path or list_user in request.path %} active {% endif %}">
+                <a data-toggle="collapse" href="#users">
+                    <i class="material-icons">manage_accounts</i>
+                    <p>Gestión de Usuarios
+                        <b class="caret"></b>
+                    </p>
+                </a>
+                <div class="{% if create_user in request.path or list_user in request.path %} collapse in {% else %} collapse {% endif %}"
+                     id="users">
+                    <ul class="nav">
+                        <li class="{% if list_user in request.path %} active {% endif %}">
+                            <a href="{% url 'user:user_list' %}">Usuarios</a>
+                        </li>
+                        <li class="{% if create_user in request.path %} active {% endif %}">
+                            <a href="{% url 'user:user_create' %}">Nuevo Usuario</a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
         </ul>
     </div>
 </div>

@@ -1,0 +1,91 @@
+{% extends 'body.html' %}
+{% load static %}
+
+{% block head %}
+
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header card-header-icon" data-background-color="rose">
+                    <i class="material-icons">display_settings</i>
+                </div>
+                <div class="card-content">
+                    <h4 class="card-title">{{ entity }}</h4>
+                    <div class="row">
+                        <div class="card-content">
+                            <div class="tab-content">
+                                <div class="tab-pane active">
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <p class="description">Código</p>
+                                            {{ object.equipment.code }}
+                                        </div>
+                                        <div class="col-md-6">
+                                            <p class="description">Descripción Equipo</p>
+                                            {{ object.equipment.description }} {{ object.equipment.maker }}, serial: {{ object.equipment.serial }}
+                                        </div>
+                                        <div class="col-md-2">
+                                            <p class="description">Fecha</p>
+                                            {{ object.date_maintenance }}
+                                        </div>
+                                        <div class="col-md-2">
+                                            <p class="description">Tipo de Mantenimiento</p>
+                                            {{ object.maintenance_type }}
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <div class="row">
+                                        <div class="col-md-7">
+                                            <p class="description">Detalle de Mantenimiento</p>
+                                            {{ object.description_maintenance }}
+                                        </div>
+                                        <div class="col-md-5">
+                                            <p class="description">Piezas o Partes Reemplazadas</p>
+                                            {{ object.chances_pieces }}
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <p class="description">Realizado por</p>
+                                            {{ object.made_by.get_full_name }}, {{ object.made_by.cargo }}
+                                        </div>
+                                        {% if object.contractor %}
+                                            <div class="col-md-4">
+                                                <p class="description">Contratista</p>
+                                                {{ object.contractor }}
+                                            </div>
+                                        {% endif %}
+                                        {% if object.physical_record %}
+                                            <div class="col-md-2">
+                                                <a href="/maintenance/physical_record?id={{ object.id }}&type=physical_record" type="button" class="btn btn-rose btn-round" target="_blank">
+                                                    Registro Físico
+                                                </a>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="card-footer text-left">
+                        <a href="{{ list_url }}" class="btn btn-default btn-fill">
+                            <i class="material-icons">arrow_back</i>
+                            Atrás
+                        </a>
+                        <a href="{{ list_url }}" class="btn btn-primary btn-fill">
+                            <i class="material-icons">picture_as_pdf</i>
+                            Descargar
+                        </a>
+                    </div>
+                </div>
+        </div>
+        </div>
+    </div>
+
+
+{% endblock %}
