@@ -16,6 +16,7 @@ from django.views.generic import CreateView, ListView, DetailView, UpdateView
 
 from core.equipment.forms import *
 from core.equipment.models import Equipment
+from core.maintenance.models import Maintenance
 from core.mixins import ValidatePermissionRequiredMixin
 
 
@@ -250,6 +251,7 @@ class EquipmentDetailView(LoginRequiredMixin, ValidatePermissionRequiredMixin, D
         context['entity'] = 'Hoja de Vida: ' + detail.code + ' ' + detail.description
         context['list_url'] = reverse_lazy('equipment:list_equipment')
         context['div'] = '12'
+        context['maintenance'] = Maintenance.objects.filter(equipment=detail.id)
         return context
 
 

@@ -52,12 +52,12 @@ $(function () {
                 orderable: false,
                 render: function (data, type, row) {
                     let edition
-                    edition = '<a title="Hoja de Vida" href="/equipment/detail/' + row.id + '/" type="button" rel="tooltip" class="btn btn-warning btn-xs btn-just-icon btn-simple"><i class="material-icons">dvr</i</a>';
-                    edition += '<a title="Editar" href="/equipment/update/' + row.id + '/" type="button" rel="tooltip" class="btn btn-info btn-xs btn-just-icon btn-simple"><i class="material-icons">edit</i</a>';
+                    edition = '<a title="Hoja de Vida" href="/equipment/detail/' + row.id + '/" type="button" rel="tooltip" class="btn btn-warning btn-xs btn-just-icon btn-simple"><i class="material-icons">dvr</i></a>';
+                    edition += '<a title="Editar" href="/equipment/update/' + row.id + '/" type="button" rel="tooltip" class="btn btn-info btn-xs btn-just-icon btn-simple"><i class="material-icons">edit</i></a>';
                     if (row['status'] === true){
-                        edition += '<a title="Fuera de Servicio" onclick=open_modal("/equipment/inactive/' + row.id + '/") type="button" rel="tooltip" class="btn btn-danger btn-xs btn-just-icon btn-simple"><i class="material-icons">power_settings_new</i</a>';
+                        edition += '<a title="Fuera de Servicio" onclick=open_modal("/equipment/inactive/' + row.id + '/") type="button" rel="tooltip" class="btn btn-danger btn-xs btn-just-icon btn-simple"><i class="material-icons">power_settings_new</i></a>';
                     } else {
-                        edition += '<a title="En Servicio" onclick=open_modal("/equipment/active/' + row.id + '/") type="button" rel="tooltip" class="btn btn-success btn-xs btn-just-icon btn-simple"><i class="material-icons">power_settings_new</i</a>';
+                        edition += '<a title="En Servicio" onclick=open_modal("/equipment/active/' + row.id + '/") type="button" rel="tooltip" class="btn btn-success btn-xs btn-just-icon btn-simple"><i class="material-icons">power_settings_new</i></a>';
                     }
                     return edition;
                 }

@@ -64,8 +64,10 @@
 
                 {% endblock %}
             </div>
-        <div class="modal fade" id="smallModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-     aria-hidden="true"></div>
+
+            <div class="modal fade" id="smallModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"></div>
+
+            <div class="modal fade" id="noticeModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 
         </div>
 
@@ -125,11 +127,19 @@
 <script src="{% static 'lib/material-dashboard-pro-html-v1.1.0/assets/js/demo.js' %}"></script>
 
 <script type="application/javascript">
+
     function open_modal(url) {
         $('#smallModal').load(url, function () {
             $(this).modal('show');
         });
     }
+
+    function open_modal_two(url) {
+        $('#noticeModal').load(url, function () {
+            $(this).modal('show');
+        });
+    }
+
 </script>
 
 </html>

@@ -3,6 +3,9 @@
 
 {% block head %}
 
+    <script src="{% static 'lib/material-dashboard-pro-html-v1.1.0/assets/js/jquery-3.1.1.min.js' %}"></script>
+    <script src="{% static 'lib/material-dashboard-pro-html-v1.1.0/assets/js/jquery.datatables.js' %}"></script>
+
 {% endblock %}
 
 {% block content %}
@@ -23,9 +26,9 @@
                                 <li>
                                     <a href="#pill2" data-toggle="tab">Mantenimientos</a>
                                 </li>
-                                <li>
-                                    <a href="#pill3" data-toggle="tab">Cambio de Piezas</a>
-                                </li>
+{#                                <li>#}
+{#                                    <a href="#pill3" data-toggle="tab">Cambio de Piezas</a>#}
+{#                                </li>#}
                             </ul>
                             <div class="tab-content">
                                 <div class="tab-pane active" id="pill1">
@@ -111,18 +114,59 @@
                                     </div>
                                 </div>
                                 <div class="tab-pane" id="pill2">
-                                    Efficiently unleash cross-media information without cross-media value. Quickly
-                                    maximize timely deliverables for real-time schemas.
-                                    <br/>
-                                    <br/>Dramatically maintain clicks-and-mortar solutions without functional solutions.
+                                    <div class="material-datatables">
+                                        <table id="data" class="table table-striped table-no-bordered table-hover"
+                                               style="width:100%">
+                                            <thead style="font-size: 9pt; font-weight: bold">
+                                            <tr>
+                                                <th class="text-center" style="width:10%; font-weight: 600">N°</th>
+                                                <th class="text-center" style="width:10%; font-weight: 600">Fecha</th>
+                                                <th class="text-center" style="width:10%; font-weight: 600">Tipo</th>
+                                                <th class="text-center" style="width:30%; font-weight: 600">Realizado
+                                                    por
+                                                </th>
+                                                <th class="text-center" style="width:20%; font-weight: 600">
+                                                    Contratista
+                                                </th>
+                                                <th class="text-center" style="width:10%; font-weight: 600">Registros
+                                                </th>
+                                                <th class="text-center" style="width:10%; font-weight: 600">Acciones
+                                                </th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            {% for item in maintenance %}
+                                                <tr>
+                                                    <td>{{ item.maintenance_number }}</td>
+                                                    <td>{{ item.date_maintenance | date:'Y-m-d' }}</td>
+                                                    <td>{{ item.maintenance_type }}</td>
+                                                    <td>{{ item.made_by.get_full_name }}, {{ item.made_by.cargo }}</td>
+                                                    <td>{{ item.contractor }}</td>
+                                                    <td>
+                                                        {% if item.physical_record %}
+                                                        <a title="Descargar Registro Físico" target="_blank" class="btn btn-simple btn-rose btn-icon" href="/maintenance/physical_record?id={{ item.id }}&type=physical_record">
+                                                            <i class="material-icons">file_download</i></a>
+                                                        {% else %}
+                                                            <i class="material-icons">not_interested</i>
+                                                        {% endif %}
+                                                    </td>
+                                                    <td>
+                                                        <a title="Detalle Mantenimiento" target="_blank" onclick="open_modal_two('/maintenance/detail_equipment/{{ item.id }}')" class="btn btn-warning btn-xs btn-just-icon btn-simple"><i class="material-icons">dvr</i></a>
+                                                        <a title="Descargar" target="_blank" onclick="" class="btn btn-danger btn-xs btn-just-icon btn-simple"><i class="material-icons">picture_as_pdf</i></a>
+                                                    </td>
+                                                </tr>
+                                            {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
-                                <div class="tab-pane" id="pill3">
-                                    Completely synergize resource taxing relationships via premier niche markets.
-                                    Professionally cultivate one-to-one customer service with robust ideas.
-                                    <br/>
-                                    <br/>Dynamically innovate resource-leveling customer service for state of the art
-                                    customer service.
-                                </div>
+{#                                <div class="tab-pane" id="pill3">#}
+{#                                    Completely synergize resource taxing relationships via premier niche markets.#}
+{#                                    Professionally cultivate one-to-one customer service with robust ideas.#}
+{#                                    <br/>#}
+{#                                    <br/>Dynamically innovate resource-leveling customer service for state of the art#}
+{#                                    customer service.#}
+{#                                </div>#}
                             </div>
                         </div>
 
@@ -133,11 +177,38 @@
                             <i class="material-icons">arrow_back</i>
                             Atrás
                         </a>
+                        <a href="{{ list_url }}" class="btn btn-primary btn-fill">
+                            <i class="material-icons">picture_as_pdf</i>
+                            Descargar
+                        </a>
                     </div>
                 </div>
         </div>
         </div>
     </div>
+
+    <script type="application/javascript">
+
+        $(document).ready(function () {
+            $('#data').DataTable({
+                responsive: false,
+                autoWidth: false,
+                order: [[6, 'desc']],
+                destroy: true,
+                deferRender: true,
+                language: {
+                    url: "//cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json"
+                 },
+                columnDefs:[
+                    {
+                        targets: [0, 1, 2, 3, 4, 5, 6],
+                        class: 'td-actions text-center'
+                    },
+                ],
+            });
+        });
+
+    </script>
 
 
 {% endblock %}

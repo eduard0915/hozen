@@ -177,6 +177,25 @@ class MaintenanceDetailView(LoginRequiredMixin, ValidatePermissionRequiredMixin,
         return context
 
 
+# Detalle mantenimiento desde listado de equipo (descripción y cambio de piezas)
+class MaintenanceDetailEquipmentView(LoginRequiredMixin, ValidatePermissionRequiredMixin, DetailView):
+    model = Maintenance
+    template_name = 'detail_maintenance_modal.html'
+    permission_required = 'equipment.view_equipment'
+
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_queryset(self):
+        return super(MaintenanceDetailEquipmentView, self).get_queryset()
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        detail = Maintenance.objects.get(pk=self.kwargs.get('pk'))
+        context['entity'] = 'Detalle de Mantenimiento ' + detail.maintenance_number
+        return context
+
+
 # Descarga de Registro Físico
 class PhysicalRecordDownloadView(LoginRequiredMixin, ValidatePermissionRequiredMixin, View):
     permission_required = 'equipment.view_equipment'

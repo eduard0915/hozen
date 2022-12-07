@@ -1,0 +1,22 @@
+{% extends 'modal_notice.html' %}
+
+
+{% block modal_content %}
+    <div class="instruction">
+        <div class="row">
+            <div class="col-md-12">
+                <strong>1. Descripción del Mantenimiento</strong>
+                <p>{{ object.description_maintenance }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="instruction">
+        <div class="row">
+            <div class="col-md-12">
+                <strong>2. Piezas o Partes Reemplazadas</strong>
+                <p>{{ object.chances_pieces }}</p>
+            </div>
+        </div>
+    </div>
+    <p>Mantenimiento <span style="font-weight: bold">{{ object.maintenance_type }}</span></p>
+{% endblock %}
