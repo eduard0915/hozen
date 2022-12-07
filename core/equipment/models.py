@@ -22,6 +22,7 @@ class Equipment(BaseModel):
     serial = models.CharField(max_length=50, verbose_name='Serial')
     fix_active = models.CharField(max_length=50, verbose_name='Activo Fijo')
     maker = models.CharField(max_length=100, verbose_name='Fabricante')
+    location = models.CharField(max_length=300, verbose_name='Ubicación', null=True, blank=True)
     date_manufactured = models.DateField(verbose_name='Fecha de Fabricación')
     date_entry = models.DateField(verbose_name='Fecha de Ingreso')
     use_time = models.FloatField(verbose_name='Tiempo de Uso')
@@ -30,9 +31,9 @@ class Equipment(BaseModel):
     manufacturer_docs = models.FileField(
         upload_to='equipment_docs/%Y%m%d', verbose_name='Documentos Anexos de Fabricante', null=True, blank=True)
     status = models.BooleanField(default=True, verbose_name='Estado')
-    frequency_maintenance = models.SmallIntegerField(verbose_name='Frecuencia Mantenimiento', choices=FREQUENCY)
+    frequency_maintenance = models.SmallIntegerField(verbose_name='Frecuencia Mantenimiento')
     calibration = models.BooleanField(default=False, verbose_name='Requiere Calibración?')
-    frequency_calibration = models.SmallIntegerField(verbose_name='Frecuencia Calibración', choices=FREQUENCY, null=True, blank=True)
+    frequency_calibration = models.SmallIntegerField(verbose_name='Frecuencia Calibración', null=True, blank=True)
 
     def __str__(self):
         return f'{self.code} {self.description}'

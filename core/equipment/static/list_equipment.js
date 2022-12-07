@@ -40,7 +40,7 @@ $(function () {
                             estado = 'En Servicio'
                             break;
                         case false:
-                            estado = 'Fuera de Servicio'
+                            estado = '<span class="badge" style="background-color: #e52d27">Fuera de Servicio</span>'
                             break;
                     }
                     return estado;

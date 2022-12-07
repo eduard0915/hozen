@@ -13,6 +13,15 @@ class EquipmentForm(ModelForm):
     class Meta:
         model = Equipment
         CHOICES_SELECT = [(True, 'Si'), (False, 'No')]
+        FREQUENCY = [
+            (None, ''),
+            (1, 'Mensual'),
+            (2, 'Bimensual'),
+            (3, 'Trimestral'),
+            (6, 'Semestral'),
+            (12, 'Anual'),
+            (24, 'Bianual')
+        ]
         fields = [
             'code',
             'description',
@@ -21,13 +30,12 @@ class EquipmentForm(ModelForm):
             'date_manufactured',
             'date_entry',
             'frequency_maintenance',
+            'location',
+            'fix_active',
             'calibration',
             'frequency_calibration',
-            'fix_active',
             'manufacturer_manual',
             'manufacturer_docs',
-            'date_manufactured',
-            'date_entry'
         ]
         widgets = {
             'code': TextInput(attrs={'class': 'form-control', 'required': True}),
@@ -35,11 +43,12 @@ class EquipmentForm(ModelForm):
             'serial': TextInput(attrs={'class': 'form-control', 'required': True}),
             'maker': TextInput(attrs={'class': 'form-control', 'required': True}),
             'fix_active': TextInput(attrs={'class': 'form-control', 'required': True}),
-            'frequency_maintenance': Select(attrs={'class': 'form-control', 'required': True}),
+            'location': TextInput(attrs={'class': 'form-control', 'required': True}),
+            'frequency_maintenance': Select(attrs={'class': 'form-control', 'required': True}, choices=FREQUENCY),
             'calibration': Select(attrs={'class': 'form-control', 'required': True}, choices=CHOICES_SELECT),
             'manufacturer_manual': FileInput(),
             'manufacturer_docs': FileInput(),
-            'frequency_calibration': Select(attrs={'class': 'form-control'}),
+            'frequency_calibration': Select(attrs={'class': 'form-control'}, choices=FREQUENCY),
             'date_manufactured': DateInput(format='%Y-%m-%d', attrs={
                 'id': 'date_manufactured',
                 'class': 'form-control datepicker',
@@ -50,11 +59,6 @@ class EquipmentForm(ModelForm):
                 'class': 'form-control datepicker',
                 'required': True
             }),
-        }
-
-        help_texts = {
-            'frequency_maintenance': 'Meses',
-            'frequency_calibration': 'Meses',
         }
 
     def save(self, commit=True):

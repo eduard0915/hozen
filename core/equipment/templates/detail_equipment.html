@@ -50,8 +50,8 @@
                                             {{ object.serial }}
                                         </div>
                                         <div class="col-md-2">
-                                            <p class="description">Fecha de Ingreso</p>
-                                            {{ object.date_entry }}
+                                            <p class="description">Fecha de Fabricación</p>
+                                            {{ object.date_manufactured | date:'Y-m-d' }}
                                         </div>
                                         <div class="col-md-2">
                                             <p class="description">Tiempo de Uso</p>
@@ -69,7 +69,7 @@
                                             {% if object.status == True %}
                                                 En Servicio
                                             {% else %}
-                                                Fuera de Servicio
+                                                <span style="color: #e52d27">Fuera de Servicio</span>
                                             {% endif %}
                                         </div>
                                         <div class="col-md-1">
@@ -77,10 +77,14 @@
                                             {{ object.fix_active }}
                                         </div>
                                         <div class="col-md-2">
-                                            <p class="description">Fecha de Ingreso</p>
-                                            {{ object.date_entry }}
+                                            <p class="description">Ubicación</p>
+                                            {{ object.location }}
                                         </div>
                                         <div class="col-md-2">
+                                            <p class="description">Fecha de Ingreso</p>
+                                            {{ object.date_entry | date:'Y-m-d' }}
+                                        </div>
+                                        <div class="col-md-1">
                                             <p class="description">Calibración</p>
                                             {% if object.calibration == True %}
                                                 Requiere
