@@ -14,7 +14,7 @@ from django.views import View
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import CreateView, ListView, DetailView, UpdateView
 
-from core.equipment.forms import EquipmentForm
+from core.equipment.forms import *
 from core.equipment.models import Equipment
 from core.mixins import ValidatePermissionRequiredMixin
 
@@ -140,6 +140,94 @@ class EquipmentUpdateView(LoginRequiredMixin, ValidatePermissionRequiredMixin, U
         context['action'] = 'edit'
         context['entity'] = 'Edición de Registro de Equipo'
         context['div'] = '12'
+        return context
+
+
+# Equipo fuera de servicio
+class EquipmentInactiveView(LoginRequiredMixin, ValidatePermissionRequiredMixin, UpdateView):
+    model = Equipment
+    form_class = EquipmentInactiveForm
+    template_name = 'modal_small.html'
+    success_url = reverse_lazy('equipment:list_equipment')
+    permission_required = 'equipment.change_equipment'
+    url_redirect = success_url
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.method = None
+
+    def dispatch(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        return super().dispatch(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        data = {}
+        try:
+            action = request.POST['action']
+            if action == 'edit':
+                form = self.get_form()
+                if form.is_valid():
+                    form.save()
+                    messages.success(request, f'Equipo Fuera de Servicio!')
+                else:
+                    messages.error(request, form.errors)
+            else:
+                data['error'] = 'No ha ingresado datos en los campos'
+        except Exception as e:
+            data['error'] = str(e)
+        return JsonResponse(data)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        equipment = Equipment.objects.get(pk=self.kwargs.get('pk'))
+        context['list_url'] = self.success_url
+        context['action'] = 'edit'
+        context['entity'] = 'Está seguro de colocar el equipo en Fuera de Servicio'
+        context['act'] = reverse_lazy('equipment:inactive_equipment', kwargs={'pk': equipment.id})
+        return context
+
+
+# Equipo en servicio
+class EquipmentActiveView(LoginRequiredMixin, ValidatePermissionRequiredMixin, UpdateView):
+    model = Equipment
+    form_class = EquipmentActiveForm
+    template_name = 'modal_small.html'
+    success_url = reverse_lazy('equipment:list_equipment')
+    permission_required = 'equipment.change_equipment'
+    url_redirect = success_url
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.method = None
+
+    def dispatch(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        return super().dispatch(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        data = {}
+        try:
+            action = request.POST['action']
+            if action == 'edit':
+                form = self.get_form()
+                if form.is_valid():
+                    form.save()
+                    messages.success(request, f'Equipo Fuera de Servicio!')
+                else:
+                    messages.error(request, form.errors)
+            else:
+                data['error'] = 'No ha ingresado datos en los campos'
+        except Exception as e:
+            data['error'] = str(e)
+        return JsonResponse(data)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        equipment = Equipment.objects.get(pk=self.kwargs.get('pk'))
+        context['list_url'] = self.success_url
+        context['action'] = 'edit'
+        context['entity'] = 'Está seguro de colocar el equipo en En Servicio'
+        context['act'] = reverse_lazy('equipment:active_equipment', kwargs={'pk': equipment.id})
         return context
 
 

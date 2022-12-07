@@ -69,7 +69,7 @@ class UserListView(LoginRequiredMixin, ValidatePermissionRequiredMixin, ListView
             action = request.POST['action']
             if action == 'searchdata':
                 data = []
-                usuarios = list(User.objects.values(
+                user = list(User.objects.values(
                     'id',
                     'last_login',
                     'cedula',
@@ -81,7 +81,7 @@ class UserListView(LoginRequiredMixin, ValidatePermissionRequiredMixin, ListView
                     'first_name',
                     'last_name'
                 ).filter(is_superuser=False).order_by('first_name'))
-                return JsonResponse(usuarios, safe=False)
+                return JsonResponse(user, safe=False)
             else:
                 data['error'] = 'Ha ocurrido un error'
         except Exception as e:

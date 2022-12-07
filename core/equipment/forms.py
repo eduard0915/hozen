@@ -71,3 +71,63 @@ class EquipmentForm(ModelForm):
         except Exception as e:
             data['error'] = str(e)
         return data
+
+
+# Equipo fuera de servicio
+class EquipmentInactiveForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['status'].label = ''
+        for form in self.visible_fields():
+            form.field.widget.attrs['autocomplete'] = 'off'
+
+    class Meta:
+        model = Equipment
+        fields = 'status',
+        widgets = {
+            'status': TextInput(attrs={'class': 'form-control', 'hidden': True}),
+        }
+
+    def save(self, commit=True):
+        data = {}
+        form = super()
+        try:
+            if form.is_valid():
+                data = form.save(commit=False)
+                data.status = False
+                data.save()
+            else:
+                data['error'] = form.errors
+        except Exception as e:
+            data['error'] = str(e)
+        return data
+
+
+# Equipo en servicio
+class EquipmentActiveForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['status'].label = ''
+        for form in self.visible_fields():
+            form.field.widget.attrs['autocomplete'] = 'off'
+
+    class Meta:
+        model = Equipment
+        fields = 'status',
+        widgets = {
+            'status': TextInput(attrs={'class': 'form-control', 'hidden': True}),
+        }
+
+    def save(self, commit=True):
+        data = {}
+        form = super()
+        try:
+            if form.is_valid():
+                data = form.save(commit=False)
+                data.status = True
+                data.save()
+            else:
+                data['error'] = form.errors
+        except Exception as e:
+            data['error'] = str(e)
+        return data

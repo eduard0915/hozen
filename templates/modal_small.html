@@ -1,0 +1,48 @@
+<div class="modal-dialog modal-small ">
+    <div class="modal-content">
+        <form enctype="multipart/form-data" method="post" action="{{ act }}">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i
+                        class="material-icons">clear</i>
+                </button>
+            </div>
+            {% csrf_token %}
+            <input type="hidden" value="{{ action }}" name="action">
+            <div class="modal-body text-center">
+                <h5>{{ entity }} </h5>
+            </div>
+            <div class="modal-footer text-center">
+                <button type="button" class="btn btn-success btn-sm" data-dismiss="modal">No</button>
+                <button type="submit" class="btn btn-danger btn-sm">Si</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+
+        $('form').on('submit', function (e) {
+            e.preventDefault();
+            var parameters = new FormData(this);
+            const form_action = $(this).attr('action');
+            $.ajax({
+                url: form_action,
+                type: 'POST',
+                data: parameters,
+                dataType: 'json',
+                processData: false,
+                contentType: false,
+            }).done(function (data) {
+                console.log(data);
+                if (!data.hasOwnProperty('error')) {
+                    location.href = window.location.pathname;
+                    return false;
+                }
+                console.log(data.error);
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+                alert(textStatus + ': ' + errorThrown);
+            }).always(function (data) {
+            });
+        });
+
+    </script>
+</div>
