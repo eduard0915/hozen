@@ -1,6 +1,7 @@
 from datetime import datetime, date
 
 from crum import get_current_user
+from dateutil.relativedelta import relativedelta
 from django.db import models
 
 from core.equipment.models import Equipment
@@ -50,6 +51,7 @@ class Maintenance(BaseModel):
 
     def save(self, force_insert=False, force_update=False, using=None, update_fields=None, *args, **kwargs):
         user = get_current_user()
+        self.date_maintenance_next = self.date_maintenance + relativedelta(months=self.equipment.frequency_maintenance)
         if user is not None:
             if not self.pk:
                 self.user_creation = user

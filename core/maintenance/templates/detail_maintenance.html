@@ -29,7 +29,7 @@
                                         </div>
                                         <div class="col-md-2">
                                             <p class="description">Fecha</p>
-                                            {{ object.date_maintenance }}
+                                            {{ object.date_maintenance | date:'Y-m-d' }}
                                         </div>
                                         <div class="col-md-2">
                                             <p class="description">Tipo de Mantenimiento</p>
@@ -53,8 +53,12 @@
                                             <p class="description">Realizado por</p>
                                             {{ object.made_by.get_full_name }}, {{ object.made_by.cargo }}
                                         </div>
+                                        <div class="col-md-2">
+                                            <p class="description">Próximo Mantenimiento</p>
+                                            {{ object.date_maintenance_next | date:'Y-m-d' }}
+                                        </div>
                                         {% if object.contractor %}
-                                            <div class="col-md-4">
+                                            <div class="col-md-3">
                                                 <p class="description">Contratista</p>
                                                 {{ object.contractor }}
                                             </div>

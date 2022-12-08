@@ -385,14 +385,8 @@ class EquipmentDetailPdfView(LoginRequiredMixin, ValidatePermissionRequiredMixin
             # equipment = Equipment.objects.get(pk=self.kwargs['pk'])
             context = {
                 'equipment': Equipment.objects.get(pk=self.kwargs['pk']),
-                # 'iso_risk': AnalysisIso.objects.filter(risk_analysis=self.kwargs['pk']),
-                # 'iso_count': AnalysisIso.objects.filter(risk_analysis=self.kwargs['pk']).count(),
-                # 'control_count': AnalysisIso.objects.filter(
-                #     risk_analysis=self.kwargs['pk'], score_decrease__isnull=False).count(),
-                # 'residual_count': AnalysisIso.objects.filter(
-                #     risk_analysis=self.kwargs['pk'], response_measure__isnull=False).count(),
-                # 'actions': ActionPlan.objects.filter(risk=self.kwargs['pk']),
-                # 'action_plan_count': ActionPlan.objects.filter(risk=self.kwargs['pk']).count(),
+                'maintenance': Maintenance.objects.filter(equipment=self.kwargs['pk']),
+                'maintenance_count': Maintenance.objects.filter(equipment=self.kwargs['pk']).count(),
                 'date_generated': datetime.now(),
                 'report_user': request.user.get_full_name(),
                 # 'company_logo': self.logo(),

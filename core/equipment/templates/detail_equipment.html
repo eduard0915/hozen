@@ -126,11 +126,14 @@
                                                 <th class="text-center" style="width:10%; font-weight: 600">N°</th>
                                                 <th class="text-center" style="width:10%; font-weight: 600">Fecha</th>
                                                 <th class="text-center" style="width:10%; font-weight: 600">Tipo</th>
-                                                <th class="text-center" style="width:30%; font-weight: 600">Realizado
+                                                <th class="text-center" style="width:20%; font-weight: 600">Realizado
                                                     por
                                                 </th>
                                                 <th class="text-center" style="width:20%; font-weight: 600">
                                                     Contratista
+                                                </th>
+                                                <th class="text-center" style="width:10%; font-weight: 600">
+                                                    Próximo
                                                 </th>
                                                 <th class="text-center" style="width:10%; font-weight: 600">Registros
                                                 </th>
@@ -144,12 +147,13 @@
                                                     <td>{{ item.maintenance_number }}</td>
                                                     <td>{{ item.date_maintenance | date:'Y-m-d' }}</td>
                                                     <td>{{ item.maintenance_type }}</td>
-                                                    <td>{{ item.made_by.get_full_name }}, {{ item.made_by.cargo }}</td>
+                                                    <td>{{ item.made_by.get_full_name }}</td>
                                                     <td>{{ item.contractor }}</td>
+                                                    <td>{{ item.date_maintenance_next | date:'Y-m-d' }}</td>
                                                     <td>
                                                         {% if item.physical_record %}
                                                         <a title="Descargar Registro Físico" target="_blank" class="btn btn-simple btn-rose btn-icon" href="/maintenance/physical_record?id={{ item.id }}&type=physical_record">
-                                                            <i class="material-icons">file_download</i></a>
+                                                            <i class="material-icons">file_present</i></a>
                                                         {% else %}
                                                             <i class="material-icons">not_interested</i>
                                                         {% endif %}
@@ -197,7 +201,7 @@
             $('#data').DataTable({
                 responsive: false,
                 autoWidth: false,
-                order: [[6, 'desc']],
+                order: [[7, 'desc']],
                 destroy: true,
                 deferRender: true,
                 language: {
@@ -205,7 +209,7 @@
                  },
                 columnDefs:[
                     {
-                        targets: [0, 1, 2, 3, 4, 5, 6],
+                        targets: [0, 1, 2, 3, 4, 5, 6, 7],
                         class: 'td-actions text-center'
                     },
                 ],
