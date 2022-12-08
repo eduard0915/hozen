@@ -361,7 +361,8 @@ class ManufacturerDocsDownloadView(LoginRequiredMixin, ValidatePermissionRequire
 class EquipmentDetailPdfView(LoginRequiredMixin, ValidatePermissionRequiredMixin, View):
     permission_required = 'equipment.view_equipment'
 
-    def link_callback(self, uri, rel):
+    @staticmethod
+    def link_callback(uri, rel):
 
         # use short variable names
         sUrl = settings.STATIC_URL  # Typically /static/
@@ -382,7 +383,6 @@ class EquipmentDetailPdfView(LoginRequiredMixin, ValidatePermissionRequiredMixin
     def get(self, request, *args, **kwargs):
         try:
             template = get_template('detail_equipment_pdf.html')
-            # equipment = Equipment.objects.get(pk=self.kwargs['pk'])
             context = {
                 'equipment': Equipment.objects.get(pk=self.kwargs['pk']),
                 'maintenance': Maintenance.objects.filter(equipment=self.kwargs['pk']),

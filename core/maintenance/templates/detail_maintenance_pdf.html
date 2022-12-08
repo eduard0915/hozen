@@ -1,0 +1,44 @@
+{% extends 'header_pdf.html' %}
+
+{% block content_pdf %}
+
+    <div class="card">
+        <h5 style="margin: 0; display: inline-block">Número de Mantenimiento: <b style="color: red">{{ maintenance.maintenance_number }}</b>
+        </h5>&nbsp&nbsp
+        <h5 style="margin: 0; display: inline-block">Tipo de Mantenimiento:<b style="color: red">{{ maintenance.maintenance_type }}
+            </b>
+        </h5>
+    </div>
+    <table class="tabContent" style="border-radius: 15px">
+        <tr style="border-bottom: none">
+            <th style="border: none"><b>Código de Equipo: </b></th>
+            <th style="border: none"><b>Descripción: </b></th>
+            <th style="border: none"><b>Fecha: </b></th>
+            <th style="border: none"><b>Próximo Mantenimiento: </b></th>
+        </tr>
+        <tr style="border-top: none; border-bottom: none">
+            <td style="border: none">{{ maintenance.equipment.code }}</td>
+            <td style="border: none">{{ maintenance.equipment.description }}</td>
+            <td style="border: none">{{ maintenance.date_maintenance }}</td>
+            <td style="border: none">{{ maintenance.date_maintenance_next }}</td>
+        </tr>
+        <tr style="border-bottom: none; border-top: none">
+            <th style="border: none" colspan="2"><b>Detalle de Mantenimiento:</b></th>
+            <th style="border: none" colspan="2"><b>Piezas o Partes Reemplazadas:</b></th>
+        </tr>
+        <tr style="border-top: none; border-bottom: none">
+            <td style="border: none; text-align: justify" colspan="2">{{ maintenance.description_maintenance }}</td>
+            <td style="border: none; text-align: justify" colspan="2">{{ maintenance.chances_pieces }}</td>
+        </tr>
+        <tr style="border-top: none; border-bottom: none">
+            <th style="border: none"><b>Realizado por:</b></th>
+            <th style="border: none"><b>Contratista:</b></th>
+        </tr>
+        <tr style="border-top: none">
+            <td style="border: none">{{ maintenance.made_by }}</td>
+            <td style="border: none">{{ maintenance.contractor }}</td>
+        </tr>
+    </table>
+    <br>
+
+{% endblock %}

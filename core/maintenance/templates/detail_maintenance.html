@@ -81,15 +81,13 @@
                             <i class="material-icons">arrow_back</i>
                             Atrás
                         </a>
-                        <a href="{{ list_url }}" class="btn btn-primary btn-fill">
+                        <a target="_blank" href="{% url 'maintenance:pdf_maintenance' object.id %}" class="btn btn-primary btn-fill">
                             <i class="material-icons">picture_as_pdf</i>
                             Descargar
                         </a>
                     </div>
                 </div>
-        </div>
+            </div>
         </div>
     </div>
-
-
 {% endblock %}

@@ -13,6 +13,7 @@ urlpatterns = [
     path('detail/<int:pk>/', MaintenanceDetailView.as_view(), name='detail_maintenance'),
     path('detail_equipment/<int:pk>/', MaintenanceDetailEquipmentView.as_view(), name='detail_maintenance_equipment'),
     path('physical_record/', PhysicalRecordDownloadView.as_view(), name='physical_record'),
+    path('download/<int:pk>/', MaintenanceDetailPdfView.as_view(), name='pdf_maintenance'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL,
