@@ -15,6 +15,7 @@ urlpatterns = [
     path('detail/<int:pk>/', EquipmentDetailView.as_view(), name='detail_equipment'),
     path('inactive/<int:pk>/', EquipmentInactiveView.as_view(), name='inactive_equipment'),
     path('active/<int:pk>/', EquipmentActiveView.as_view(), name='active_equipment'),
+    path('download/<int:pk>/', EquipmentDetailPdfView.as_view(), name='pdf_equipment'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL,

@@ -1,19 +1,23 @@
-from datetime import date
+import os.path
+from datetime import date, datetime
 from urllib.request import urlopen
 
 import boto3 as boto3
+from xhtml2pdf import pisa
 from botocore.config import Config
 from botocore.exceptions import ClientError
 from decouple import config
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import JsonResponse, HttpResponse
+from django.http import JsonResponse, HttpResponse, HttpResponseRedirect
+from django.template.loader import get_template
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import CreateView, ListView, DetailView, UpdateView
 
+from config import settings
 from core.equipment.forms import *
 from core.equipment.models import Equipment
 from core.maintenance.models import Maintenance
@@ -351,3 +355,65 @@ class ManufacturerDocsDownloadView(LoginRequiredMixin, ValidatePermissionRequire
                 return HttpResponse('El documento solicitado no existe')
         else:
             return HttpResponse('La solicitud es incorrecta, faltan parámetros')
+
+
+# Descarga de detalle de equipo en PDF
+class EquipmentDetailPdfView(LoginRequiredMixin, ValidatePermissionRequiredMixin, View):
+    permission_required = 'equipment.view_equipment'
+
+    def link_callback(self, uri, rel):
+
+        # use short variable names
+        sUrl = settings.STATIC_URL  # Typically /static/
+        sRoot = settings.STATIC_ROOT  # Typically /home/userX/project_static/
+        mUrl = settings.MEDIA_URL  # Typically /static/media/
+
+        # convert URIs to absolute system paths
+        if uri.startswith(mUrl):
+            return uri
+        elif uri.startswith(sUrl):
+            path = os.path.join(sRoot, uri.replace(sUrl, ""))
+            if not os.path.isfile(path):
+                raise Exception(
+                    'Logo provided do not exists on path given: %s' % path
+                )
+            return path
+
+    def get(self, request, *args, **kwargs):
+        try:
+            template = get_template('detail_equipment_pdf.html')
+            # equipment = Equipment.objects.get(pk=self.kwargs['pk'])
+            context = {
+                'equipment': Equipment.objects.get(pk=self.kwargs['pk']),
+                # 'iso_risk': AnalysisIso.objects.filter(risk_analysis=self.kwargs['pk']),
+                # 'iso_count': AnalysisIso.objects.filter(risk_analysis=self.kwargs['pk']).count(),
+                # 'control_count': AnalysisIso.objects.filter(
+                #     risk_analysis=self.kwargs['pk'], score_decrease__isnull=False).count(),
+                # 'residual_count': AnalysisIso.objects.filter(
+                #     risk_analysis=self.kwargs['pk'], response_measure__isnull=False).count(),
+                # 'actions': ActionPlan.objects.filter(risk=self.kwargs['pk']),
+                # 'action_plan_count': ActionPlan.objects.filter(risk=self.kwargs['pk']).count(),
+                'date_generated': datetime.now(),
+                'report_user': request.user.get_full_name(),
+                # 'company_logo': self.logo(),
+                # 'company': Company.objects.get(id=1),
+                'title_pdf': 'HOJA DE VIDA DE EQUIPO',
+                'title': 'Hoja de Vida',
+                'page_size': '215.9mm 279.4mm',
+            }
+            html = template.render(context)
+            response = HttpResponse(content_type='application/pdf')
+            pisa.CreatePDF(
+                html, dest=response,
+                link_callback=self.link_callback
+            )
+            return response
+        except:
+            pass
+        return HttpResponseRedirect(reverse_lazy('equipment:list_equipment'))
+
+    # def logo(self):
+    #     try:
+    #         return Company.objects.get(id=1).get_logo()
+    #     except Exception:
+    #         return '{}{}'.format(STATIC_URL, 'img/empty.png')

@@ -1,0 +1,77 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ES">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<title>{{ title }}</title>
+<style>
+    /* Tamaño y márgenes de PDF */
+    @page {
+        size: {{ page_size }};
+        margin: 1.5cm;
+    }
+
+    .table {
+        border: solid #ABB2B9
+    }
+
+    .table td {
+        padding: 7px 7px 0 7px;
+        text-align: center;
+        font-size: 10pt;
+    }
+
+    .table th {
+        padding-left: 7px;
+        padding-top: 7px;
+        vertical-align: bottom;
+        text-align: justify;
+        font-size: 8pt;
+        width: 50%;
+    }
+
+    .logo-cell {
+        width: 100px;
+    }
+
+    .tabContent tr {
+        border: solid #ABB2B9;
+        padding-left: 5px;
+    }
+
+    .tabContent td {
+        font-size: 8pt;
+        padding-bottom: 2px;
+    }
+
+    .tabContent th {
+        font-size: 8pt;
+        text-align: left;
+        padding-top: 2px;
+    }
+
+
+</style>
+<body>
+
+    <table class="table">
+        <tr style="border-bottom: none">
+            <td rowspan="2"  class="logo-cell">LOGO CLIENTE</td>
+            <td style="border-bottom: none"><h5><b>NOMBRE CLIENTE</b></h5></td>
+        </tr>
+        <tr style="border-top: none">
+            <td><h5><b>{{ title_pdf }}</b></h5></td>
+        </tr>
+    </table>
+    <br>
+
+{% block content_pdf %}
+
+
+{% endblock %}
+
+    <div class="card-footer">
+        Reporte generado por: {{ report_user }}, el {{ date_generated }}
+    </div>
+
+</body>
+</html>

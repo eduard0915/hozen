@@ -1,0 +1,85 @@
+{% extends 'header_pdf.html' %}
+
+{% block content_pdf %}
+
+    <div class="card">
+        <h5 style="margin: 0; display: inline-block">CÓDIGO EQUIPO: <b style="color: red"> {{ equipment.code }}</b>
+        </h5>&nbsp&nbsp
+        <h5 style="margin: 0; display: inline-block">DESCRIPCIÓN:<b style="color: red"> {{ equipment.description }}</b></h5>
+        &nbsp&nbsp
+        <h5 style="margin: 0; display: inline-block">ESTADO:<b style="color: red">
+            {% if equipment.status == True %} En Servicio {% else %} Fuera de Servicio {% endif %}</b>
+        </h5>&nbsp&nbsp
+    </div>
+    <table class="tabContent" style="border-radius: 15px">
+        <tr style="border-bottom: none">
+            <th style="border: none"><strong>Fabricante: </strong></th>
+            <th style="border: none"><strong>Serial: </strong></th>
+            <th style="border: none"><strong>Fecha de Fabricación: </strong></th>
+            <th style="border: none"><strong>Tiempo de Uso: </strong></th>
+        </tr>
+        <tr style="border-top: none; border-bottom: none">
+            <td style="border: none">{{ equipment.maker }}</td>
+            <td style="border: none">{{ equipment.serial }}</td>
+            <td style="border: none">{{ equipment.date_manufactured }}</td>
+            <td style="border: none">{{ equipment.use_time }} años</td>
+        </tr>
+        <tr style="border-bottom: none; border-top: none">
+            <th style="border: none"><strong>Fecha de Ingreso:</strong></th>
+            <th style="border: none"><strong>Frecuencia de Mantenimiento:</strong></th>
+            <th style="border: none"><strong>Ubicación:</strong></th>
+            <th style="border: none"><strong>Activo Fijo:</strong></th>
+        </tr>
+        <tr style="border-top: none; border-bottom: none">
+            <td style="border: none">{{ equipment.date_entry }}</td>
+            <td style="border: none">Cada {{ equipment.frequency_maintenance }} meses</td>
+            <td style="border: none">{{ equipment.location }}</td>
+            <td style="border: none; text-align: justify">{{ equipment.fix_active }}</td>
+        </tr>
+        <tr style="border-top: none; border-bottom: none">
+            <th style="border: none"><strong>Requiere Calibración:</strong></th>
+            {% if equipment.calibration == True %}
+                <th style="border: none"><strong>Frecuencia de Calibración:</strong></th>
+            {% endif %}
+        </tr>
+        <tr style="border-top: none">
+            <td style="border: none">{% if equipment.calibration == True %} Si {% else%} No {% endif %}</td>
+            <td style="border: none">{% if equipment.calibration == True %} Cada {{ equipment.frequency_calibration }} meses {% endif %}</td>
+        </tr>
+    </table>
+    <br>
+
+{#    <br>#}
+{#    {% if action_plan_count > 0 %}#}
+{#        <div class="card">#}
+{#            <p><h5 style="margin: 0">TRATAMIENTO DE LOS RIESGOS</h5>#}
+{#        </div>#}
+{#        <table class="plans" style="border-radius: 5px">#}
+{#            <tr>#}
+{#                <th style="width:28%">Riesgo</th>#}
+{#                <th style="width:8%">Código</th>#}
+{#                <th style="width:30%">Descripción</th>#}
+{#                <th style="width:18%">Responsable</th>#}
+{#                <th style="width:8%">Inicio</th>#}
+{#                <th style="width:8%">Final</th>#}
+{#                <th style="width:8%">Avance</th>#}
+{#                <th style="width:8%">Ejecución</th>#}
+{#            </tr>#}
+{#            {% for plan in actions %}#}
+{#                <tr>#}
+{#                    <td>{{ plan.risk_pa.risk_description }}</td>#}
+{#                    <td>{{ plan.action_plan }}</td>#}
+{#                    <td>{{ plan.task }}</td>#}
+{#                    <td>{{ plan.task_response }}</td>#}
+{#                    <td>{{ plan.date_scheduled|date:'Y-m-d' }}</td>#}
+{#                    <td>{{ plan.date_end|date:'Y-m-d' }}</td>#}
+{#                    <td>{% if plan.progress == None %} 0% {% else %} {{ plan.progress }}% {% endif %}</td>#}
+{#                    <td>{% if plan.date_task == None %} {% else %} {{ plan.date_task|date:'Y-m-d' }} {% endif %}</td>#}
+{#                </tr>#}
+{#            {% endfor %}#}
+{#        </table>#}
+{#        <br>#}
+{#    {% endif %}#}
+
+
+{% endblock %}
