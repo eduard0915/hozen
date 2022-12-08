@@ -75,12 +75,41 @@
                     <th style="border: none" colspan="4"><b>Piezas o Partes Reemplazadas:</b></th>
                 </tr>
                 <tr style="border-top: none">
-                    <td style="border: none; text-align: justify" colspan="4">{{ item.chances_pieces }}</td>
+                    <td style="text-align: justify" colspan="4">{{ item.chances_pieces }}</td>
                 </tr>
             </table>
             <br>
         {% endfor %}
-    <br>
+    {% endif %}
+
+    {% if calibration_count > 0 %}
+        <div class="card">
+            <h5 style="margin: 0; display: inline-block">CALIBRACIONES</h5>
+        </div>
+        {% for cal in calibration %}
+            <table class="tabContent" style="border-radius: 15px">
+                <tr style="border-bottom: none">
+                    <th style="border: none"><b>Fecha: </b></th>
+                    <th style="border: none"><b>Realizado por: </b></th>
+                    <th style="border: none"><b>N° de Certificado: </b></th>
+                    <th style="border: none"><b>Próxima Calibración: </b></th>
+                </tr>
+                <tr style="border-top: none; border-bottom: none">
+                    <td style="border: none">{{ cal.date_calibration | date:'Y-m-d' }}</td>
+                    <td style="border: none">{{ cal.calibration_made_by }}</td>
+                    <td style="border: none">{{ cal.certificate_number }}</td>
+                    <td style="border: none">{{ cal.date_calibration_next | date:'Y-m-d' }}</td>
+                </tr>
+                <tr style="border-bottom: none; border-top: none">
+                    <th style="border: none" colspan="4"><b>Observaciones:</b></th>
+                </tr>
+                <tr style="border-top: none">
+                    <td style="border: none; text-align: justify" colspan="4">{{ cal.comments_calibration }}</td>
+                </tr>
+            </table>
+            <br>
+        {% endfor %}
+
 
     {% endif %}
 

@@ -26,9 +26,11 @@
                                 <li>
                                     <a href="#pill2" data-toggle="tab">Mantenimientos</a>
                                 </li>
-{#                                <li>#}
-{#                                    <a href="#pill3" data-toggle="tab">Cambio de Piezas</a>#}
-{#                                </li>#}
+                                {% if calibration_count > 0 %}
+                                    <li>
+                                        <a href="#pill3" data-toggle="tab">Calibraciones</a>
+                                    </li>
+                                {% endif %}
                             </ul>
                             <div class="tab-content">
                                 <div class="tab-pane active" id="pill1">
@@ -119,7 +121,7 @@
                                 </div>
                                 <div class="tab-pane" id="pill2">
                                     <div class="material-datatables">
-                                        <table id="data" class="table table-striped table-no-bordered table-hover"
+                                        <table id="datatable_one" class="table table-striped table-no-bordered table-hover"
                                                style="width:100%">
                                             <thead style="font-size: 9pt; font-weight: bold">
                                             <tr>
@@ -160,7 +162,7 @@
                                                     </td>
                                                     <td>
                                                         <a title="Detalle Mantenimiento" target="_blank" onclick="open_modal_two('/maintenance/detail_equipment/{{ item.id }}')" class="btn btn-warning btn-xs btn-just-icon btn-simple"><i class="material-icons">dvr</i></a>
-                                                        <a title="Descargar" target="_blank" onclick="" class="btn btn-danger btn-xs btn-just-icon btn-simple"><i class="material-icons">picture_as_pdf</i></a>
+                                                        <a title="Descargar" target="_blank" href="{% url 'maintenance:pdf_maintenance' object.id %}" class="btn btn-danger btn-xs btn-just-icon btn-simple"><i class="material-icons">picture_as_pdf</i></a>
                                                     </td>
                                                 </tr>
                                             {% endfor %}
@@ -168,16 +170,61 @@
                                         </table>
                                     </div>
                                 </div>
-{#                                <div class="tab-pane" id="pill3">#}
-{#                                    Completely synergize resource taxing relationships via premier niche markets.#}
-{#                                    Professionally cultivate one-to-one customer service with robust ideas.#}
-{#                                    <br/>#}
-{#                                    <br/>Dynamically innovate resource-leveling customer service for state of the art#}
-{#                                    customer service.#}
-{#                                </div>#}
+                                <div class="tab-pane" id="pill3">
+                                    <div class="col-md-8">
+                                        <div class="material-datatables">
+                                            <table id="datatable_two"
+                                                   class="table table-striped table-no-bordered table-hover"
+                                                   style="width:100%">
+                                                <thead style="font-size: 9pt; font-weight: bold">
+                                                <tr>
+                                                    <th class="text-center" style="width:15%; font-weight: 600">Fecha
+                                                    </th>
+                                                    <th class="text-center" style="width:40%; font-weight: 600">
+                                                        Realizado por
+                                                    </th>
+                                                    <th class="text-center" style="width:15%; font-weight: 600">
+                                                        Próxima
+                                                    </th>
+                                                    <th class="text-center" style="width:15%; font-weight: 600">
+                                                        Certificado
+                                                    </th>
+                                                    <th class="text-center" style="width:15%; font-weight: 600">
+                                                        Acciones
+                                                    </th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                {% for cal in calibration %}
+                                                    <tr>
+                                                        <td>{{ cal.date_calibration | date:'Y-m-d' }}</td>
+                                                        <td>{{ cal.calibration_made_by }}</td>
+                                                        <td>{{ cal.date_calibration_next | date:'Y-m-d' }}</td>
+                                                        <td>
+                                                            {% if cal.calibration_certificate %}
+                                                                <a title="Descargar Certificado" target="_blank"
+                                                                   class="btn btn-simple btn-rose btn-icon"
+                                                                   href="/calibration/certificate?id={{ cal.id }}&type=calibration_certificate">
+                                                                    <i class="material-icons">file_present</i></a>
+                                                            {% else %}
+                                                                <i class="material-icons">not_interested</i>
+                                                            {% endif %}
+                                                        </td>
+                                                        <td>
+                                                            <a title="Observaciones Calibración"
+                                                               onclick="open_modal_two('/calibration/detail/{{ cal.id }}')"
+                                                               class="btn btn-warning btn-xs btn-just-icon btn-simple"><i
+                                                                    class="material-icons">dvr</i></a>
+                                                        </td>
+                                                    </tr>
+                                                {% endfor %}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-
                     </div>
                     <br>
                     <div class="card-footer text-left">
@@ -198,7 +245,7 @@
     <script type="application/javascript">
 
         $(document).ready(function () {
-            $('#data').DataTable({
+            $('#datatable_one').DataTable({
                 responsive: false,
                 autoWidth: false,
                 order: [[7, 'desc']],
@@ -210,6 +257,23 @@
                 columnDefs:[
                     {
                         targets: [0, 1, 2, 3, 4, 5, 6, 7],
+                        class: 'td-actions text-center'
+                    },
+                ],
+            });
+
+            $('#datatable_two').DataTable({
+                responsive: false,
+                autoWidth: false,
+                order: [[4, 'desc']],
+                destroy: true,
+                deferRender: true,
+                language: {
+                    url: "//cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json"
+                 },
+                columnDefs:[
+                    {
+                        targets: [0, 1, 2, 3, 4],
                         class: 'td-actions text-center'
                     },
                 ],

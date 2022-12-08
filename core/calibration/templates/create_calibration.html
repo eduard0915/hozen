@@ -26,30 +26,22 @@
                     </i>
                 </div>
                 <div class="card-content">
-                    <h4 class="card-title">{{ entity }}{% if action == 'edit' %} {{ maintenance.maintenance_number }}{% endif %}</h4>
+                    <h4 class="card-title">{{ entity }}{% if action == 'edit' %} {{ calibration.certificate_number }}{% endif %}</h4>
 
                     <form enctype="multipart/form-data" method="post" action="" class="form-horizontal">
                         <input type="hidden" name="action" value="{{ action }}">
                         {% csrf_token %}
                         <div class="row">
-                            {% if action == 'add' %}
-                                <div class="col-md-2">
-                                    <div class="form-group label-floating">
-                                        <label for="id_maintenance_number" class="control-label">N° de Mantenimiento</label>
-                                            {{ form.maintenance_number }}
-                                    </div>
-                                </div>
-                            {% endif %}
                             <div class="col-md-2">
                                 <div class="form-group label-floating">
-                                    <label for="id_date_maintenance" class="control-label">Fecha</label>
-                                        {{ form.date_maintenance }}
+                                    <label for="id_date_calibration" class="control-label">Fecha</label>
+                                        {{ form.date_calibration }}
                                 </div>
                             </div>
-                            <div class="col-md-8">
+                            <div class="col-md-10">
                                 <label for="id_equipment">Equipo</label>
                                 <select name="equipment" id="id_equipment" class="col-md-12">
-                                    <option value="{{ maintenance.equipment_id }}" selected>{{ maintenance.equipment.code }} {{ maintenance.equipment.description }} {{ maintenance.equipment.maker }}{% if action == 'edit' %}, serial: {% endif %}{{ maintenance.equipment.serial }}</option>
+                                    <option value="{{ calibration.equipment_id }}" selected>{{ calibration.equipment.code }} {{ calibration.equipment.description }} {{ maintenance.equipment.maker }}{% if action == 'edit' %}, serial: {% endif %}{{ maintenance.equipment.serial }}</option>
                                     {% for eq in equipment %}
                                         <option value="{{ eq.id }}">{{ eq.code }} {{ eq.description }} {{ eq.maker }}, serial: {{ eq.serial }}</option>
                                     {% endfor %}
@@ -57,41 +49,26 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-2">
+                            <div class="col-md-4">
                                 <div class="form-group label-floating">
-                                    <label for="id_maintenance_type" class="control-label">Tipo de Mantenimiento</label>
-                                    <select id="id_maintenance_type" name="maintenance_type" class="selectpicker" data-style="select-with-transition" title="Seleccionar" data-size="7">
-                                        <option value="{{ maintenance.maintenance_type }}" selected>{{ maintenance.maintenance_type }}</option>
-                                        <option value="Correctivo">Correctivo</option>
-                                        <option value="Preventivo">Preventivo</option>
-                                    </select>
+                                    <label for="id_calibration_made_by" class="control-label">Realizar por</label>
+                                        {{ form.calibration_made_by }}
                                 </div>
                             </div>
                             <div class="col-md-3">
-                                <div class="form-group label-floating">
-                                    <label for="id_made_by" class="control-label">Realizado por</label>
-                                    <select name="made_by" id="id_made_by" class="selectpicker" data-style="select-with-transition" title="Seleccionar" data-size="7">
-                                        <option value="{{ maintenance.made_by_id }}" selected>{{ maintenance.made_by.get_full_name }}, {{ maintenance.made_by.cargo }}</option>
-                                        {% for user in users %}
-                                            <option value="{{ user.id }}">{{ user.get_full_name }}, {{ user.cargo }}</option>
-                                        {% endfor %}
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-group label-floating">
-                                    <label for="id_contractor" class="control-label">Contratista</label>
-                                        {{ form.contractor }}
-                                </div>
+                                    <div class="form-group label-floating">
+                                        <label for="id_maintenance_number" class="control-label">N° de Certificado de Calibración</label>
+                                            {{ form.certificate_number }}
+                                    </div>
                             </div>
                             <div class="col-md-3">
                             <div class="fileinput fileinput-new text-center" data-provides='fileinput'>
                                 <div class="fileinput-preview fileinput-exists thumbnail"></div>
                                 <div>
                                     <span class="btn btn-rose btn-round btn-file">
-                                        <span class="fileinput-new">Registro Físico</span>
+                                        <span class="fileinput-new">Certificado de Calibración</span>
                                         <span class="fileinput-exists">Cambiar</span>
-                                        {{ form.physical_record }}
+                                        {{ form.calibration_certificate }}
                                     </span>
                                     <a href="#" class="btn btn-danger btn-round fileinput-exists"
                                        data-dismiss="fileinput"><i class="fa fa-times"></i> Eliminar</a>
@@ -102,14 +79,8 @@
                         <div class="row">
                             <div class="col-md-7">
                                 <div class="form-group label-floating">
-                                    <label for="id_description_maintenance" class="control-label">Descripción del Mantenimiento</label>
-                                        {{ form.description_maintenance }}
-                                </div>
-                            </div>
-                            <div class="col-md-5">
-                                <div class="form-group label-floating">
-                                    <label for="id_chances_pieces" class="control-label">Cambio de Piezas o Partes</label>
-                                        {{ form.chances_pieces }}
+                                    <label for="id_comments_calibration" class="control-label">Comentarios u Observaciones</label>
+                                        {{ form.comments_calibration }}
                                 </div>
                             </div>
                         </div>
@@ -155,10 +126,10 @@
             });
         });
 
-        $('#date_maintenance').datetimepicker({
+        $('#date_calibration').datetimepicker({
             format: 'YYYY-MM-DD',
             locale: 'es',
-            defaultDate: $('.date_maintenance'),
+            defaultDate: $('.date_calibration'),
             icons: {
                 time: "fa fa-clock-o",
                 date: "fa fa-calendar",

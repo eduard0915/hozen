@@ -182,7 +182,7 @@ class MaintenanceDetailView(LoginRequiredMixin, ValidatePermissionRequiredMixin,
         return context
 
 
-# Detalle mantenimiento desde listado de equipo (descripción y cambio de piezas)
+# Detalle mantenimiento desde detalle de mantenimientos de equipos (descripción y cambio de piezas)
 class MaintenanceDetailEquipmentView(LoginRequiredMixin, ValidatePermissionRequiredMixin, DetailView):
     model = Maintenance
     template_name = 'detail_maintenance_modal.html'

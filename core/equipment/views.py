@@ -18,6 +18,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import CreateView, ListView, DetailView, UpdateView
 
 from config import settings
+from core.calibration.models import Calibration
 from core.equipment.forms import *
 from core.equipment.models import Equipment
 from core.maintenance.models import Maintenance
@@ -256,6 +257,8 @@ class EquipmentDetailView(LoginRequiredMixin, ValidatePermissionRequiredMixin, D
         context['list_url'] = reverse_lazy('equipment:list_equipment')
         context['div'] = '12'
         context['maintenance'] = Maintenance.objects.filter(equipment=detail.id)
+        context['calibration'] = Calibration.objects.filter(equipment=detail.id)
+        context['calibration_count'] = Calibration.objects.filter(equipment=detail.id).count()
         return context
 
 
@@ -387,6 +390,8 @@ class EquipmentDetailPdfView(LoginRequiredMixin, ValidatePermissionRequiredMixin
                 'equipment': Equipment.objects.get(pk=self.kwargs['pk']),
                 'maintenance': Maintenance.objects.filter(equipment=self.kwargs['pk']),
                 'maintenance_count': Maintenance.objects.filter(equipment=self.kwargs['pk']).count(),
+                'calibration': Calibration.objects.filter(equipment=self.kwargs['pk']),
+                'calibration_count': Calibration.objects.filter(equipment=self.kwargs['pk']).count(),
                 'date_generated': datetime.now(),
                 'report_user': request.user.get_full_name(),
                 # 'company_logo': self.logo(),

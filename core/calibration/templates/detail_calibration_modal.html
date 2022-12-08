@@ -1,0 +1,15 @@
+{% extends 'modal_notice.html' %}
+
+
+{% block modal_content %}
+
+    <div class="instruction">
+        <div class="row">
+            <div class="col-md-12">
+                <strong>Observaciones</strong>
+                <p>{{ object.comments_calibration}}</p>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
