@@ -27,10 +27,7 @@ Tip 3: you can change the color of the sidebar with data-background-color="white
                 <div class="collapse" id="collapseExample">
                     <ul class="nav">
                         <li>
-                            <a href="#">Mi Perfil</a>
-                        </li>
-                        <li>
-                            <a href="#">Editar</a>
+                            <a href="{% url 'user:user_profile' request.user.id %}">Mi Perfil</a>
                         </li>
                     </ul>
                 </div>
@@ -52,19 +49,14 @@ Tip 3: you can change the color of the sidebar with data-background-color="white
 
             <li class="{% if create_equipment in request.path or list_equipment in request.path %} active {% endif %}">
                 <a data-toggle="collapse" href="#equipment">
-                    <i class="material-icons">hardware</i>
-                    <p>Equipos
-                        <b class="caret"></b>
-                    </p>
+                    <i class="material-icons">precision_manufacturing</i>
+                    <p>Gestión de Equipos<b class="caret"></b></p>
                 </a>
                 <div class="{% if create_equipment in request.path or list_equipment in request.path %} collapse in {% else %} collapse {% endif %}"
                      id="equipment">
                     <ul class="nav">
                         <li class="{% if list_equipment in request.path %} active {% endif %}">
-                            <a href="{% url 'equipment:list_equipment' %}">Listado de Equipos</a>
-                        </li>
-                        <li class="{% if create_equipment in request.path %} active {% endif %}">
-                            <a href="{% url 'equipment:create_equipment' %}">Registro de Equipos</a>
+                            <a href="{% url 'equipment:list_equipment' %}">Equipos</a>
                         </li>
                     </ul>
                 </div>
@@ -87,9 +79,6 @@ Tip 3: you can change the color of the sidebar with data-background-color="white
                         <li class="{% if list_maintenance in request.path %} active {% endif %}">
                             <a href="{% url 'maintenance:list_maintenance' %}">Mantenimientos</a>
                         </li>
-                        <li class="{% if create_maintenance in request.path %} active {% endif %}">
-                            <a href="{% url 'maintenance:create_maintenance' %}">Registro de Mantenimiento</a>
-                        </li>
                     </ul>
                 </div>
             </li>
@@ -105,14 +94,11 @@ Tip 3: you can change the color of the sidebar with data-background-color="white
                         <b class="caret"></b>
                     </p>
                 </a>
-                <div class="{% if create_calibration in request.path or list__calibration in request.path %} collapse in {% else %} collapse {% endif %}"
+                <div class="{% if create_calibration in request.path or list_calibration in request.path %} collapse in {% else %} collapse {% endif %}"
                      id="calibration">
                     <ul class="nav">
-                        <li class="{% if list_calibration in request.path %} active {% endif %}">
+                        <li class="{% if create_calibration in request.path or list_calibration in request.path %} active {% endif %}">
                             <a href="{% url 'calibration:list_calibration' %}">Calibraciones</a>
-                        </li>
-                        <li class="{% if create_calibration in request.path %} active {% endif %}">
-                            <a href="{% url 'calibration:create_calibration' %}">Registro de Calibración</a>
                         </li>
                     </ul>
                 </div>
@@ -132,11 +118,8 @@ Tip 3: you can change the color of the sidebar with data-background-color="white
                 <div class="{% if create_user in request.path or list_user in request.path %} collapse in {% else %} collapse {% endif %}"
                      id="users">
                     <ul class="nav">
-                        <li class="{% if list_user in request.path %} active {% endif %}">
+                        <li class="{% if create_user in request.path or list_user in request.path %} active {% endif %}">
                             <a href="{% url 'user:user_list' %}">Usuarios</a>
-                        </li>
-                        <li class="{% if create_user in request.path %} active {% endif %}">
-                            <a href="{% url 'user:user_create' %}">Nuevo Usuario</a>
                         </li>
                     </ul>
                 </div>

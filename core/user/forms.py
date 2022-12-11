@@ -1,6 +1,6 @@
 from django.forms import *
 
-from core.user.models import User
+from core.user.models import User, AcademicTraining
 
 
 # Creación de usuario
@@ -19,7 +19,6 @@ class UserForm(ModelForm):
             'cargo', 'cellphone',
             'cedula', 'username',
             'password', 'groups',
-            'is_active'
         ]
         widgets = {
             'password': PasswordInput(render_value=True, attrs={'class': 'form-control'}),
@@ -35,7 +34,6 @@ class UserForm(ModelForm):
         exclude = ['user_permissions', 'last_login', 'date_joined', 'is_superuser', 'is_staff', 'is_active']
         help_texts = {
             'groups': 'Seleccione perfil del usuario',
-            'is_active': 'Indica si el usuario está habilitado',
             'username': 'Únicamente letras y/o números'
         }
 
@@ -75,11 +73,13 @@ class UserUpdateForm(ModelForm):
         model = User
         fields = [
             'first_name',
-            'last_name', 'email',
-            'cargo', 'cellphone',
-            'cedula', 'username',
+            'last_name',
+            'email',
+            'cargo',
+            'cellphone',
+            'cedula',
+            'username',
             'groups',
-            'is_active',
         ]
         widgets = {
             'first_name': TextInput(attrs={'class': 'form-control', 'required': True}),
@@ -89,15 +89,12 @@ class UserUpdateForm(ModelForm):
             'cellphone': TextInput(attrs={'class': 'form-control'}),
             'cedula': TextInput(attrs={'class': 'form-control'}),
             'username': TextInput(attrs={'class': 'form-control', 'readonly': True}),
-            'is_active': NullBooleanSelect(attrs={'class': 'form-control'}),
             'groups': SelectMultiple(attrs={'class': 'form-control', 'required': True}),
         }
         exclude = ['user_permissions', 'last_login', 'date_joined', 'is_superuser', 'is_staff']
 
         help_texts = {
             'groups': 'Seleccione perfil del usuario',
-            'is_active': 'Indica si el usuario está habilitado',
-            'username': ''
         }
 
     def save(self, commit=True):
@@ -113,7 +110,65 @@ class UserUpdateForm(ModelForm):
         return data
 
 
-# Edición de perfil por usuario logueado
+# Inactivar Usuario
+class UserInactiveForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for form in self.visible_fields():
+            form.field.widget.attrs['autocomplete'] = 'off'
+
+    class Meta:
+        model = User
+        fields = 'is_active',
+        widgets = {
+            'is_active': TextInput(attrs={'class': 'form-control', 'hidden': True}),
+        }
+
+    def save(self, commit=True):
+        data = {}
+        form = super()
+        try:
+            if form.is_valid():
+                data = form.save(commit=False)
+                data.is_active = False
+                data.save()
+            else:
+                data['error'] = form.errors
+        except Exception as e:
+            data['error'] = str(e)
+        return data
+
+
+# Activar usuario
+class UserActiveForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for form in self.visible_fields():
+            form.field.widget.attrs['autocomplete'] = 'off'
+
+    class Meta:
+        model = User
+        fields = 'is_active',
+        widgets = {
+            'is_active': TextInput(attrs={'class': 'form-control', 'hidden': True}),
+        }
+
+    def save(self, commit=True):
+        data = {}
+        form = super()
+        try:
+            if form.is_valid():
+                data = form.save(commit=False)
+                data.is_active = True
+                data.save()
+            else:
+                data['error'] = form.errors
+        except Exception as e:
+            data['error'] = str(e)
+        return data
+
+
+# Edición de perfil por usuario autenticado
 class ProfileUpdateForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -130,6 +185,8 @@ class ProfileUpdateForm(ModelForm):
             'cellphone',
             'cedula',
             'email_person',
+            'address_user',
+            'date_birth'
         ]
         widgets = {
             'first_name': TextInput(attrs={'class': 'form-control', 'required': True}),
@@ -139,6 +196,12 @@ class ProfileUpdateForm(ModelForm):
             'cargo': TextInput(attrs={'class': 'form-control'}),
             'cellphone': TextInput(attrs={'class': 'form-control'}),
             'cedula': TextInput(attrs={'class': 'form-control'}),
+            'address_user': TextInput(attrs={'class': 'form-control'}),
+            'date_birth': DateInput(format='%Y-%m-%d', attrs={
+                'id': 'date_birth',
+                'class': 'form-control datepicker',
+                'required': True
+            })
         }
         exclude = [
             'user_permissions',
@@ -196,6 +259,86 @@ class UserPasswordUpdateForm(ModelForm):
                     if user.password != pwd:
                         u.set_password(pwd)
                 u.save()
+            else:
+                data['error'] = form.errors
+        except Exception as e:
+            data['error'] = str(e)
+        return data
+
+
+# Registro de formación académica
+class AcademicTrainingForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for form in self.visible_fields():
+            form.field.widget.attrs['autocomplete'] = 'off'
+
+    class Meta:
+        model = AcademicTraining
+        fields = [
+            'academic_title',
+            'academic_institution',
+            'date_graduation',
+            'file_diploma',
+            'user',
+        ]
+        widgets = {
+            'academic_title': TextInput(attrs={'class': 'form-control', 'required': True}),
+            'academic_institution': TextInput(attrs={'class': 'form-control', 'required': True}),
+            'user': TextInput(attrs={'class': 'form-control', 'hidden': True}),
+            'file_diploma': FileInput(),
+            'date_graduation': DateInput(format='%Y-%m-%d', attrs={
+                'id': 'date_graduation',
+                'class': 'form-control datepicker',
+                'required': True
+            })
+        }
+
+    def save(self, commit=True):
+        data = {}
+        form = super()
+        try:
+            if form.is_valid():
+                form.save()
+            else:
+                data['error'] = form.errors
+        except Exception as e:
+            data['error'] = str(e)
+        return data
+
+
+# Editar registro de formación académica
+class AcademicTrainingUpdateForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for form in self.visible_fields():
+            form.field.widget.attrs['autocomplete'] = 'off'
+
+    class Meta:
+        model = AcademicTraining
+        fields = [
+            'academic_title',
+            'academic_institution',
+            'date_graduation',
+            'file_diploma',
+        ]
+        widgets = {
+            'academic_title': TextInput(attrs={'class': 'form-control', 'required': True}),
+            'academic_institution': TextInput(attrs={'class': 'form-control', 'required': True}),
+            'file_diploma': FileInput(),
+            'date_graduation': DateInput(format='%Y-%m-%d', attrs={
+                'id': 'date_graduation',
+                'class': 'form-control datepicker',
+                'required': True
+            })
+        }
+
+    def save(self, commit=True):
+        data = {}
+        form = super()
+        try:
+            if form.is_valid():
+                data = form.save()
             else:
                 data['error'] = form.errors
         except Exception as e:

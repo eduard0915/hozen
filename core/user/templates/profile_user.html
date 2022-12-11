@@ -87,9 +87,9 @@
                         Activo {% endif %}</h4>
                     <h4 class="card-title text-danger" style="font-weight: bold">{% if object.is_active == False %}
                         Inactivo {% endif %}</h4>
-                    {#                <a href="{% url 'user:user_update' object.id %}" class="btn btn-rose btn-round">Editar</a>#}
                     <div class="row">
-                        <a onclick="open_modal_two('/user/add_academic/{{ object.id }}')" class="btn btn-primary btn-round">Añadir Formación</a>
+                        <a href="{% url 'user:user_profile_update' request.user.id %}" class="btn btn-primary btn-round">Editar</a>
+                        <a onclick="open_modal_two('/user/edit/password/')" class="btn btn-rose btn-round">Actualizar Contraseña</a>
                     </div>
                 </div>
             </div>
@@ -106,12 +106,10 @@
                                style="width:100%">
                             <thead style="font-size: 9pt">
                             <tr>
-                                <th class="text-center" style="width:25%">Título</th>
-                                <th class="text-center" style="width:30%">Institución Académica</th>
+                                <th class="text-center" style="width:35%">Título</th>
+                                <th class="text-center" style="width:35%">Institución Académica</th>
                                 <th class="text-center" style="width:15%">Fecha</th>
                                 <th class="text-center" style="width:15%">Diploma</th>
-                                <th class="text-center" style="width:15%">Acciones
-                                </th>
                             </tr>
                             </thead>
                             <tbody>
@@ -129,12 +127,6 @@
                                         {% else %}
                                             <i class="material-icons">not_interested</i>
                                         {% endif %}
-                                    </td>
-                                    <td>
-                                        <a title="Editar Registro Académico"
-                                           onclick="open_modal_two('/user/update_academic/{{ fo.id }}')"
-                                           class="btn btn-warning btn-xs btn-just-icon btn-simple"><i
-                                                class="material-icons">edit</i></a>
                                     </td>
                                 </tr>
                             {% endfor %}

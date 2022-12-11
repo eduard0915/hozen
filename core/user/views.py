@@ -10,7 +10,7 @@ from django.views.generic import CreateView, ListView, UpdateView, DetailView, F
 
 from core.mixins import ValidatePermissionRequiredMixin
 from core.user.forms import *
-from core.user.models import User
+from core.user.models import User, AcademicTraining
 
 
 # Creación de usuario
@@ -139,6 +139,98 @@ class UserUpdateView(LoginRequiredMixin, ValidatePermissionRequiredMixin, Update
         return context
 
 
+# Inactivar usuario
+class UserInactiveView(LoginRequiredMixin, ValidatePermissionRequiredMixin, UpdateView):
+    model = User
+    form_class = UserInactiveForm
+    template_name = 'active_user.html'
+    success_url = reverse_lazy('user:user_list')
+    permission_required = 'user.change_user'
+    url_redirect = success_url
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.method = None
+
+    @method_decorator(csrf_exempt)
+    def dispatch(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        return super().dispatch(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        data = {}
+        try:
+            action = request.POST['action']
+            if action == 'edit':
+                form = self.get_form()
+                if form.is_valid():
+                    form.save()
+                    messages.success(request, f'Usuario inactivado satisfactoriamente!')
+                else:
+                    messages.error(request, form.errors)
+            else:
+                data['error'] = 'No ha ingresado datos en los campos'
+        except Exception as e:
+            data['error'] = str(e)
+        return JsonResponse(data)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = User.objects.get(pk=self.kwargs.get('pk'))
+        context['list_url'] = self.success_url
+        context['entity'] = 'Editar Usuario'
+        context['action'] = 'edit'
+        context['entity'] = 'Está seguro de inactivar el usuario ' + user.get_full_name()
+        context['act'] = reverse_lazy('user:user_inactive', kwargs={'pk': user.id})
+        return context
+
+
+# Activar Usuario
+class UserActiveView(LoginRequiredMixin, ValidatePermissionRequiredMixin, UpdateView):
+    model = User
+    form_class = UserActiveForm
+    template_name = 'active_user.html'
+    success_url = reverse_lazy('user:user_list')
+    permission_required = 'user.change_user'
+    url_redirect = success_url
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.method = None
+
+    @method_decorator(csrf_exempt)
+    def dispatch(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        return super().dispatch(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        data = {}
+        try:
+            action = request.POST['action']
+            if action == 'edit':
+                form = self.get_form()
+                if form.is_valid():
+                    form.save()
+                    messages.success(request, f'Usuario activado satisfactoriamente!')
+                else:
+                    messages.error(request, form.errors)
+            else:
+                data['error'] = 'No ha ingresado datos en los campos'
+        except Exception as e:
+            data['error'] = str(e)
+        return JsonResponse(data)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = User.objects.get(pk=self.kwargs.get('pk'))
+        context['list_url'] = self.success_url
+        context['entity'] = 'Editar Usuario'
+        context['action'] = 'edit'
+        context['entity'] = 'Está seguro de activar el usuario ' + user.get_full_name()
+        context['act'] = reverse_lazy('user:user_active', kwargs={'pk': user.id})
+        return context
+
+
 # Detalle de Usuario por administrador
 class UserDetailView(LoginRequiredMixin, ValidatePermissionRequiredMixin, DetailView):
     model = User
@@ -153,33 +245,33 @@ class UserDetailView(LoginRequiredMixin, ValidatePermissionRequiredMixin, Detail
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context['academic'] = AcademicTraining.objects.filter(user=self.request.user.id)
         context['title'] = 'Perfil de Usuario'
         context['entity'] = 'Perfil de Usuario'
-        context['list_url'] = reverse_lazy('user:user_list')
         return context
 
 
-# Detalle de Perfil de usuario logueado
-class MyProfileDetailView(LoginRequiredMixin, ValidatePermissionRequiredMixin, DetailView):
+# Detalle de Perfil de usuario autenticado
+class ProfileDetailView(LoginRequiredMixin, ValidatePermissionRequiredMixin, DetailView):
     model = User
-    template_name = 'detail_user.html'
+    template_name = 'profile_user.html'
     permission_required = 'user.view_user'
 
     def dispatch(self, request, *args, **kwargs):
         return super().dispatch(request, *args, **kwargs)
 
     def get_queryset(self):
-        return super(MyProfileDetailView, self).get_queryset()
+        return super(ProfileDetailView, self).get_queryset()
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context['academic'] = AcademicTraining.objects.filter(user=self.kwargs.get('pk'))
         context['title'] = 'Mi Perfil'
         context['entity'] = 'Mi Perfil'
-        context['list_url'] = reverse_lazy('inicio:inicio')
         return context
 
 
-# Edición de perfil por usuario logueado
+# Edición de perfil por usuario autenticado
 class ProfileUpdateView(LoginRequiredMixin, ValidatePermissionRequiredMixin, UpdateView):
     model = User
     form_class = ProfileUpdateForm
@@ -224,7 +316,7 @@ class ProfileUpdateView(LoginRequiredMixin, ValidatePermissionRequiredMixin, Upd
 class UserPasswordUpdateView(LoginRequiredMixin, ValidatePermissionRequiredMixin, UpdateView):
     model = User
     form_class = UserPasswordUpdateForm
-    template_name = 'create.html'
+    template_name = 'change_password.html'
     success_url = reverse_lazy('user:user_list')
     permission_required = 'user.change_user'
     url_redirect = success_url
@@ -254,10 +346,12 @@ class UserPasswordUpdateView(LoginRequiredMixin, ValidatePermissionRequiredMixin
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        user = User.objects.get(pk=self.kwargs.get('pk'))
         context['title'] = 'Reseteo de Contraseña'
         context['list_url'] = self.success_url
         context['entity'] = 'Reseteo de Contraseña de Usuario'
         context['action'] = 'edit'
+        context['act'] = reverse_lazy('user:user_password_update', kwargs={'pk': user.id})
         return context
 
 
@@ -277,7 +371,8 @@ class UserChangePasswordView(LoginRequiredMixin, ValidatePermissionRequiredMixin
         form = PasswordChangeForm(user=self.request.user)
         form.fields['old_password'].widget.attrs['class'] = 'form-control'
         form.fields['new_password1'].widget.attrs['class'] = 'form-control'
-        form.fields['new_password1'].help_text = 'Alfanumérica, mínimo de 8 caracteres, no parecerse a su información personal, ni a otra contraseña utilizada'
+        form.fields['new_password1'].help_text = 'Alfanumérica, mínimo de 8 caracteres, no parecerse a su información ' \
+                                                 'personal, ni a otra contraseña utilizada '
         form.fields['new_password2'].widget.attrs['class'] = 'form-control'
         return form
 
@@ -301,8 +396,87 @@ class UserChangePasswordView(LoginRequiredMixin, ValidatePermissionRequiredMixin
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = 'Cambio de Contraseña'
         context['list_url'] = self.success_url
-        context['entity'] = 'Cambio de Contraseña'
+        context['entity'] = 'Actualización de Contraseña'
         context['action'] = 'edit'
+        context['act'] = reverse_lazy('user:change_password')
+        return context
+
+
+# Registro de formación académica
+class AcademicTrainingCreateView(LoginRequiredMixin, ValidatePermissionRequiredMixin, CreateView):
+    model = AcademicTraining
+    form_class = AcademicTrainingForm
+    template_name = 'create_academic_modal.html'
+    permission_required = 'user.add_user'
+
+    @method_decorator(csrf_exempt)
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        data = {}
+        try:
+            action = request.POST['action']
+            if action == 'add':
+                form = self.form_class(data=request.POST)
+                if form.is_valid():
+                    form.save()
+                    # user = User.objects.get(pk=self.kwargs.get('pk'))
+                    # for data in form:
+                    #     dt = data.save(commit=False)
+                    #     dt.user_id = user.id
+                    #     dt.save()
+                else:
+                    messages.error(request, form.errors)
+            else:
+                data['error'] = 'No ha ingresado datos en los campos'
+        except Exception as e:
+            data['error'] = str(e)
+        return JsonResponse(data)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = User.objects.get(pk=self.kwargs.get('pk'))
+        context['action'] = 'add'
+        context['user'] = user
+        context['entity'] = 'Registro de Formación Académica'
+        context['act'] = reverse_lazy('user:academic_create', kwargs={'pk': user.id})
+        return context
+
+
+# Edición de Registro de formación académica
+class AcademicTrainingUpdateView(LoginRequiredMixin, ValidatePermissionRequiredMixin, UpdateView):
+    model = AcademicTraining
+    form_class = AcademicTrainingUpdateForm
+    template_name = 'create_academic_modal.html'
+    permission_required = 'user.change_user'
+
+    @method_decorator(csrf_exempt)
+    def dispatch(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        return super().dispatch(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        data = {}
+        try:
+            action = request.POST['action']
+            if action == 'edit':
+                form = self.get_form()
+                if form.is_valid():
+                    form.save()
+                else:
+                    messages.error(request, form.errors)
+            else:
+                data['error'] = 'No ha ingresado datos en los campos'
+        except Exception as e:
+            data['error'] = str(e)
+        return JsonResponse(data)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = User.objects.get(pk=self.kwargs.get('pk'))
+        context['action'] = 'edit'
+        context['entity'] = 'Edición de Registro de Formación Académica'
+        context['act'] = reverse_lazy('user:academic_update', kwargs={'pk': user.id})
         return context

@@ -1,6 +1,5 @@
 from django.conf import settings
 from django.db import models
-from django.forms import model_to_dict
 
 
 class BaseModel(models.Model):

@@ -62,8 +62,15 @@ $(function () {
                     let edition
                     edition = '<a title="Perfil de Usuario" href="/user/detail/' + row.id + '/" type="button" rel="tooltip" class="btn btn-warning btn-xs btn-just-icon btn-simple"><i class="material-icons">dvr</i</a>';
                     edition += '<a title="Editar Usuario" href="/user/update/' + row.id + '/" type="button" rel="tooltip" class="btn btn-info btn-xs btn-just-icon btn-simple"><i class="material-icons">edit</i</a>';
-                    edition += '<a title="Inactivar" href="/user/update/' + row.id + '/" type="button" rel="tooltip" class="btn btn-danger btn-xs btn-just-icon btn-simple"><i class="material-icons">person_off</i</a>';
-                    edition += '<a title="Resetear Contraseña" href="/user/update/' + row.id + '/" type="button" rel="tooltip" class="btn btn-warning btn-xs btn-just-icon btn-simple"><i class="material-icons">password</i</a>';
+                    switch (row['is_active']) {
+                        case true:
+                            edition += '<a title="Inactivar" onclick=open_modal("/user/inactive/' + row.id + '/") type="button" rel="tooltip" class="btn btn-danger btn-xs btn-just-icon btn-simple"><i class="material-icons">person_off</i</a>';
+                            break;
+                        case false:
+                            edition += '<a title="Activar" onclick=open_modal("/user/active/' + row.id + '/") type="button" rel="tooltip" class="btn btn-success btn-xs btn-just-icon btn-simple"><i class="material-icons">person</i</a>';
+                            break;
+                    }
+                    edition += '<a title="Resetear Contraseña" onclick=open_modal_two("/user/update_password/' + row.id + '/") type="button" rel="tooltip" class="btn btn-primary btn-xs btn-just-icon btn-simple"><i class="material-icons">password</i</a>';
                     return edition;
                 }
             },

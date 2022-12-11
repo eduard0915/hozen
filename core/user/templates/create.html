@@ -1,9 +1,13 @@
 {% extends 'form_one.html' %}
 
 {% block card_title %}
-
-    <div class="card-header card-header-icon" data-background-color="rose">
-        <i class="material-icons">person_add</i>
-    </div>
-
+    {% if action == 'add' %}
+        <div class="card-header card-header-icon" data-background-color="rose">
+            <i class="material-icons">person_add</i>
+        </div>
+    {% else %}
+        <div class="card-header card-header-icon" data-background-color="rose">
+            <i class="material-icons">person</i>
+        </div>
+    {% endif %}
 {% endblock %}
