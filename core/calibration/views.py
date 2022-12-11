@@ -25,7 +25,7 @@ class CalibrationCreateView(LoginRequiredMixin, ValidatePermissionRequiredMixin,
     form_class = CalibrationForm
     template_name = 'create_calibration.html'
     success_url = reverse_lazy('calibration:list_calibration')
-    permission_required = 'equipment.add_equipment'
+    permission_required = 'calibration.add_calibration'
     url_redirect = success_url
 
     @method_decorator(csrf_exempt)
@@ -64,7 +64,7 @@ class CalibrationCreateView(LoginRequiredMixin, ValidatePermissionRequiredMixin,
 class CalibrationListView(LoginRequiredMixin, ValidatePermissionRequiredMixin, ListView):
     model = Calibration
     template_name = 'list_calibration.html'
-    permission_required = 'equipment.view_equipment'
+    permission_required = 'calibration.view_calibration'
 
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
@@ -111,7 +111,7 @@ class CalibrationUpdateView(LoginRequiredMixin, ValidatePermissionRequiredMixin,
     form_class = CalibrationForm
     template_name = 'create_calibration.html'
     success_url = reverse_lazy('calibration:list_calibration')
-    permission_required = 'equipment.change_equipment'
+    permission_required = 'calibration.change_calibration'
     url_redirect = success_url
 
     def __init__(self, **kwargs):
@@ -155,7 +155,7 @@ class CalibrationUpdateView(LoginRequiredMixin, ValidatePermissionRequiredMixin,
 class CalibrationDetailView(LoginRequiredMixin, ValidatePermissionRequiredMixin, DetailView):
     model = Calibration
     template_name = 'detail_calibration_modal.html'
-    permission_required = 'equipment.view_equipment'
+    permission_required = 'calibration.view_calibration'
 
     def dispatch(self, request, *args, **kwargs):
         return super().dispatch(request, *args, **kwargs)
@@ -172,7 +172,7 @@ class CalibrationDetailView(LoginRequiredMixin, ValidatePermissionRequiredMixin,
 
 # Descarga Certificado de calibración
 class CalibrationCertificateDownloadView(LoginRequiredMixin, ValidatePermissionRequiredMixin, View):
-    permission_required = 'equipment.view_equipment'
+    permission_required = 'calibration.view_calibration'
 
     @staticmethod
     def get(request):

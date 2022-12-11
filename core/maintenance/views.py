@@ -31,7 +31,7 @@ class MaintenanceCreateView(LoginRequiredMixin, ValidatePermissionRequiredMixin,
     form_class = MaintenanceForm
     template_name = 'create_maintenance.html'
     success_url = reverse_lazy('maintenance:list_maintenance')
-    permission_required = 'equipment.add_equipment'
+    permission_required = 'maintenance.add_maintenance'
     url_redirect = success_url
 
     @method_decorator(csrf_exempt)
@@ -71,7 +71,7 @@ class MaintenanceCreateView(LoginRequiredMixin, ValidatePermissionRequiredMixin,
 class MaintenanceListView(LoginRequiredMixin, ValidatePermissionRequiredMixin, ListView):
     model = Maintenance
     template_name = 'list_maintenance.html'
-    permission_required = 'equipment.view_equipment'
+    permission_required = 'maintenance.view_maintenance'
 
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
@@ -120,7 +120,7 @@ class MaintenanceUpdateView(LoginRequiredMixin, ValidatePermissionRequiredMixin,
     form_class = MaintenanceUpdateForm
     template_name = 'create_maintenance.html'
     success_url = reverse_lazy('maintenance:list_maintenance')
-    permission_required = 'equipment.change_equipment'
+    permission_required = 'maintenance.change_maintenance'
     url_redirect = success_url
 
     def __init__(self, **kwargs):
@@ -165,7 +165,7 @@ class MaintenanceUpdateView(LoginRequiredMixin, ValidatePermissionRequiredMixin,
 class MaintenanceDetailView(LoginRequiredMixin, ValidatePermissionRequiredMixin, DetailView):
     model = Maintenance
     template_name = 'detail_maintenance.html'
-    permission_required = 'equipment.view_equipment'
+    permission_required = 'maintenance.view_maintenance'
 
     def dispatch(self, request, *args, **kwargs):
         return super().dispatch(request, *args, **kwargs)
@@ -186,7 +186,7 @@ class MaintenanceDetailView(LoginRequiredMixin, ValidatePermissionRequiredMixin,
 class MaintenanceDetailEquipmentView(LoginRequiredMixin, ValidatePermissionRequiredMixin, DetailView):
     model = Maintenance
     template_name = 'detail_maintenance_modal.html'
-    permission_required = 'equipment.view_equipment'
+    permission_required = 'maintenance.view_maintenance'
 
     def dispatch(self, request, *args, **kwargs):
         return super().dispatch(request, *args, **kwargs)
@@ -203,7 +203,7 @@ class MaintenanceDetailEquipmentView(LoginRequiredMixin, ValidatePermissionRequi
 
 # Descarga de Registro Físico
 class PhysicalRecordDownloadView(LoginRequiredMixin, ValidatePermissionRequiredMixin, View):
-    permission_required = 'equipment.view_equipment'
+    permission_required = 'maintenance.view_maintenance'
 
     @staticmethod
     def get(request):
@@ -252,7 +252,7 @@ class PhysicalRecordDownloadView(LoginRequiredMixin, ValidatePermissionRequiredM
 
 # Descarga de detalle de mantenimiento en PDF
 class MaintenanceDetailPdfView(LoginRequiredMixin, ValidatePermissionRequiredMixin, View):
-    permission_required = 'equipment.view_equipment'
+    permission_required = 'maintenance.view_maintenance'
 
     @staticmethod
     def link_callback(uri, rel):
