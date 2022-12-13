@@ -58,6 +58,7 @@ class EquipmentCreateView(LoginRequiredMixin, ValidatePermissionRequiredMixin, C
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Registro de Equipo'
+        context['equipment'] = EquipmentMarkModel.objects.all()
         context['list_url'] = self.success_url
         context['action'] = 'add'
         context['entity'] = 'Registro de Equipo'
