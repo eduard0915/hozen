@@ -13,42 +13,47 @@ class EquipmentForm(ModelForm):
     class Meta:
         model = Equipment
         CHOICES_SELECT = [(True, 'Si'), (False, 'No')]
-        FREQUENCY = [
-            (None, ''),
-            (1, 'Mensual'),
-            (2, 'Bimensual'),
-            (3, 'Trimestral'),
-            (6, 'Semestral'),
-            (12, 'Anual'),
-            (24, 'Bianual')
+        CHOICES_RISK = [
+            ('', ''),
+            ('Clase I, Riesgo Bajo', 'Clase I, Riesgo Bajo'),
+            ('Clase IIa, Riesgo Moderado', 'Clase IIa, Riesgo Moderado'),
+            ('Clase IIb, Riesgo Alto', 'Clase IIb, Riesgo Alto'),
+            ('Clase III, Riesgo Muy Alto', 'Clase III, Riesgo Muy Alto'),
         ]
+        CHOICES_ACQUISITION = [('', ''), ('Propio', 'Propio'), ('Comodato', 'Comodato'), ('Préstamo', 'Préstamo')]
         fields = [
-            'code',
-            'description',
+            'description_equipment',
             'serial',
-            'maker',
             'date_manufactured',
             'date_entry',
             'frequency_maintenance',
             'location',
             'fix_active',
+            'register_regulatory',
+            'risk_classification',
+            'acquisition',
+            'useful_life',
             'calibration',
             'frequency_calibration',
             'manufacturer_manual',
             'manufacturer_docs',
+            'photo_equipment',
         ]
         widgets = {
-            'code': TextInput(attrs={'class': 'form-control', 'required': True}),
-            'description': TextInput(attrs={'class': 'form-control', 'required': True}),
+            'description_equipment': Select(attrs={'class': 'form-control', 'required': True}),
             'serial': TextInput(attrs={'class': 'form-control', 'required': True}),
-            'maker': TextInput(attrs={'class': 'form-control', 'required': True}),
             'fix_active': TextInput(attrs={'class': 'form-control', 'required': True}),
             'location': TextInput(attrs={'class': 'form-control', 'required': True}),
-            'frequency_maintenance': Select(attrs={'class': 'form-control', 'required': True}, choices=FREQUENCY),
+            'register_regulatory': TextInput(attrs={'class': 'form-control', 'required': True}),
+            'frequency_maintenance': TextInput(attrs={'class': 'form-control', 'required': True}),
+            'useful_life': TextInput(attrs={'class': 'form-control', 'required': True}),
             'calibration': Select(attrs={'class': 'form-control', 'required': True}, choices=CHOICES_SELECT),
+            'risk_classification': Select(attrs={'class': 'form-control', 'required': True}, choices=CHOICES_RISK),
+            'acquisition': Select(attrs={'class': 'form-control', 'required': True}, choices=CHOICES_ACQUISITION),
             'manufacturer_manual': FileInput(),
             'manufacturer_docs': FileInput(),
-            'frequency_calibration': Select(attrs={'class': 'form-control'}, choices=FREQUENCY),
+            'photo_equipment': FileInput(),
+            'frequency_calibration': TextInput(attrs={'class': 'form-control'}),
             'date_manufactured': DateInput(format='%Y-%m-%d', attrs={
                 'id': 'date_manufactured',
                 'class': 'form-control datepicker',
@@ -59,6 +64,12 @@ class EquipmentForm(ModelForm):
                 'class': 'form-control datepicker',
                 'required': True
             }),
+        }
+
+        help_texts = {
+            'frequency_calibration': 'Meses',
+            'frequency_maintenance': 'Meses',
+            'useful_life': 'Años',
         }
 
     def save(self, commit=True):

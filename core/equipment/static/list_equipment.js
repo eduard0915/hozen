@@ -4,7 +4,7 @@ $(function () {
         autoWidth: false,
         destroy: true,
         deferRender: true,
-        order: [[ 0, "desc" ]],
+        order: [[ 4, "desc" ]],
         language: {
             url: "//cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json"
         },
@@ -17,9 +17,7 @@ $(function () {
             dataSrc: ""
         },
         columns: [
-            {'data': 'code'},
-            {'data': 'description'},
-            {'data': 'maker'},
+            {'data': 'description_equipment__description'},
             {'data': 'serial'},
             {'data': 'fix_active'},
             {'data': 'status'},
@@ -27,11 +25,18 @@ $(function () {
         ],
         columnDefs: [
             {
-                targets: [0, 1, 2, 3, 4],
+                targets: [0],
+                className: 'td-actions text-center',
+                render: function (data, type, row) {
+                    return row['description_equipment__description'] + ' ' + row['description_equipment__mark'] + '/' + row['description_equipment__model'];
+                }
+            },
+            {
+                targets: [1, 2],
                 class: 'td-actions text-center'
             },
             {
-                targets: [5],
+                targets: [3],
                 className: 'td-actions text-center',
                 render: function (data, type, row) {
                     let estado = null
@@ -47,7 +52,7 @@ $(function () {
                 }
             },
             {
-                targets: [6],
+                targets: [4],
                 class: 'td-actions text-center',
                 orderable: false,
                 render: function (data, type, row) {

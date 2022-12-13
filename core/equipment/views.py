@@ -82,13 +82,12 @@ class EquipmentListView(LoginRequiredMixin, ValidatePermissionRequiredMixin, Lis
             if action == 'searchdata':
                 data = []
                 equip = list(Equipment.objects.values(
-                    'id',
-                    'code',
-                    'description',
+                    'description_equipment__description',
+                    'description_equipment__mark',
+                    'description_equipment__model',
                     'serial',
                     'fix_active',
                     'status',
-                    'maker'
                 ).order_by('-id'))
                 return JsonResponse(equip, safe=False)
             else:
@@ -253,7 +252,7 @@ class EquipmentDetailView(LoginRequiredMixin, ValidatePermissionRequiredMixin, D
         context = super().get_context_data(**kwargs)
         detail = Equipment.objects.get(pk=self.kwargs.get('pk'))
         context['title'] = 'Hoja de Vida: ' + detail.code
-        context['entity'] = 'Hoja de Vida: ' + detail.code + ' ' + detail.description
+        context['entity'] = 'Hoja de Vida: ' + detail.code + ' ' + detail.description + ' ' + detail.maker
         context['list_url'] = reverse_lazy('equipment:list_equipment')
         context['div'] = '12'
         context['maintenance'] = Maintenance.objects.filter(equipment=detail.id)
