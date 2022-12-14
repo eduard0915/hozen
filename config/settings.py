@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'core.login',
     'core.maintenance',
     'core.calibration',
+    'core.ticket',
 ]
 
 MIDDLEWARE = [

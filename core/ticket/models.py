@@ -24,9 +24,9 @@ class Ticket(BaseModel):
         return self.ticket
 
     class Meta:
-        db_table = 'Maintenance'
-        verbose_name = 'Maintenance'
-        verbose_name_plural = 'Maintenances'
+        db_table = 'Ticket'
+        verbose_name = 'Ticket'
+        verbose_name_plural = 'Tickets'
 
     def save(self, force_insert=False, force_update=False, using=None, update_fields=None, *args, **kwargs):
         user = get_current_user()
