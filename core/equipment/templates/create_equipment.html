@@ -8,7 +8,8 @@
     <script src="{% static 'lib/material-dashboard-pro-html-v1.1.0/assets/js/material.min.js' %}" type="text/javascript"></script>
     <script src="{% static 'lib/material-dashboard-pro-html-v1.1.0/assets/js/moment.min.js' %}"></script>
     <script src="{% static 'lib/moment-es/es.js' %}"></script>
-    <script src="{% static 'lib/material-dashboard-pro-html-v1.1.0/assets/js/bootstrap-datetimepicker.js' %}"></script>
+    <script src="{% static 'lib/material-dashboard-pro-html-v1.1.0/assets/js/bootstrap-datetimepicker.js' %}">
+    </script><link href="{% static 'lib/select2-4.1.0/dist/css/material-plugins.min.css' %}" rel="stylesheet">
 
 {% endblock %}
 
@@ -96,7 +97,7 @@
                                 <div class="form-group label-floating">
                                     <label for="id_risk_classification" class="control-label">Clasificación de Riesgo</label>
                                     <select id="id_risk_classification" name="risk_classification" class="selectpicker" data-style="select-with-transition" title="Seleccionar" data-size="7">
-                                        <option value="{{ maintenance.maintenance_type }}" selected>{{ maintenance.maintenance_type }}</option>
+                                        <option value="{{ equip.risk_classification }}" selected>{{ equip.risk_classification }}</option>
                                         <option value="Clase I, Riesgo Bajo">Clase I, Riesgo Bajo</option>
                                         <option value="Clase IIa, Riesgo Moderado">Clase IIa, Riesgo Moderado</option>
                                         <option value="Clase IIb, Riesgo Alto">Clase IIb, Riesgo Alto</option>
@@ -108,7 +109,7 @@
                                 <div class="form-group label-floating">
                                     <label for="id_acquisition" class="control-label">Adquisición</label>
                                     <select id="id_acquisition" name="acquisition" class="selectpicker" data-style="select-with-transition" title="Seleccionar" data-size="7">
-                                        <option value="{{ maintenance.maintenance_type }}" selected>{{ maintenance.maintenance_type }}</option>
+                                        <option value="{{ equip.acquisition }}" selected>{{ equip.acquisition }}</option>
                                         <option value="Propio">Propio</option>
                                         <option value="Comodato">Comodato</option>
                                         <option value="Alquiler">Alquiler</option>
@@ -120,7 +121,7 @@
                                 <div class="form-group label-floating">
                                     <label for="id_calibration" class="control-label">Calibración</label>
                                     <select id="id_calibration" name="calibration" class="selectpicker" data-style="select-with-transition" title="Seleccionar" data-size="7">
-                                        <option value="{{ maintenance.maintenance_type }}" selected>{{ maintenance.maintenance_type }}</option>
+                                        <option value="{{ equip.calibration }}" selected>{{ equip.calibration }}</option>
                                         <option value="True">Si</option>
                                         <option value="False">No</option>
                                     </select>

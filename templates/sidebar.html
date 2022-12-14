@@ -46,17 +46,24 @@ Tip 3: you can change the color of the sidebar with data-background-color="white
 
             {% url 'equipment:create_equipment' as create_equipment %}
             {% url 'equipment:list_equipment' as list_equipment %}
+            {% url 'equipment:create_equipment_mark_model' as create_equipment_mark %}
+            {% url 'equipment:list_equipment_mark_model' as list_equipment_mark %}
 
-            <li class="{% if create_equipment in request.path or list_equipment in request.path %} active {% endif %}">
+            <li class="{% if create_equipment in request.path or list_equipment in request.path or list_equipment_mark in request.path or create_equipment_mark in request.path %} active {% endif %}">
                 <a data-toggle="collapse" href="#equipment">
                     <i class="material-icons">precision_manufacturing</i>
                     <p>Gestión de Equipos<b class="caret"></b></p>
                 </a>
-                <div class="{% if create_equipment in request.path or list_equipment in request.path %} collapse in {% else %} collapse {% endif %}"
+                <div class="{% if create_equipment in request.path or list_equipment in request.path or list_equipment_mark in request.path or create_equipment_mark in request.path %} collapse in {% else %} collapse {% endif %}"
                      id="equipment">
                     <ul class="nav">
                         <li class="{% if list_equipment in request.path %} active {% endif %}">
                             <a href="{% url 'equipment:list_equipment' %}">Equipos</a>
+                        </li>
+                    </ul>
+                    <ul class="nav">
+                        <li class="{% if list_equipment_mark in request.path or create_equipment_mark in request.path %} active {% endif %}">
+                            <a href="{% url 'equipment:list_equipment_mark_model' %}">Marcas y Modelos</a>
                         </li>
                     </ul>
                 </div>

@@ -48,7 +48,7 @@ class Equipment(BaseModel):
     frequency_maintenance = models.PositiveIntegerField(verbose_name='Frecuencia Mantenimiento')
     calibration = models.BooleanField(default=False, verbose_name='Requiere Calibración?')
     frequency_calibration = models.PositiveIntegerField(verbose_name='Frecuencia Calibración', null=True, blank=True)
-    photo_equipment = models.ImageField(verbose_name='Imagen del Equipo', null=True, blank=True)
+    photo_equipment = models.ImageField(verbose_name='Imagen del Equipo', upload_to='photo_equipment/%Y%m%d', null=True, blank=True)
     useful_life = models.PositiveIntegerField(verbose_name='Vida Util')
     risk_classification = models.CharField(max_length=20, verbose_name='Clasificación de Riesgo')
     acquisition = models.CharField(max_length=50, verbose_name='Adquisición')

@@ -29,7 +29,6 @@
                                 <div class="row">
                             {% endif %}
                         <div {% if field.name == 'date_manufactured' or field.name == 'date_entry' or field.name == 'serial' %} class="col-md-2"
-                        {% elif field.name == 'description' %} class="col-md-4"
                         {% elif field.name == 'description_equipment' %} class="col-md-6"
                         {% else %} class="col-md-3" {% endif %}>
                             <div {% if field.name == 'is_active' %} class="checkbox"

@@ -2,25 +2,33 @@
 {% load static %}
 
 {% block head_list %}
-
-    <script src="{% static 'list_equipment.js' %}"></script>
-
+    {% if entity == 'Marcas y Modelos de Equipos' %}
+        <script src="{% static 'list_equipment_mark_model.js' %}"></script>
+    {% else %}
+        <script src="{% static 'list_equipment.js' %}"></script>
+    {% endif %}
 {% endblock %}
 
 {% block card_title %}
-
     <div class="card-header card-header-icon" data-background-color="rose">
         <i class="material-icons">list</i>
     </div>
-
 {% endblock %}
 
 {% block columns %}
-    <th class="text-md-center" style="width:50%; font-weight: 600">Descripción</th>
-    <th class="text-md-center" style="width:15%; font-weight: 600">Serial</th>
-    <th class="text-md-center" style="width:10%; font-weight: 600">Activo Fijo</th>
-    <th class="text-md-center" style="width:10%; font-weight: 600">Estado</th>
-    <th class="text-md-center" style="width:15%; font-weight: 600">Acciones</th>
+    {% if entity == 'Marcas y Modelos de Equipos' %}
+        <th class="text-md-center" style="width:45%; font-weight: 600">Descripción</th>
+        <th class="text-md-center" style="width:15%; font-weight: 600">Marca</th>
+        <th class="text-md-center" style="width:15%; font-weight: 600">Modelo</th>
+        <th class="text-md-center" style="width:15%; font-weight: 600">Fabricante</th>
+        <th class="text-md-center" style="width:10%; font-weight: 600">Acciones</th>
+    {% else %}
+        <th class="text-md-center" style="width:50%; font-weight: 600">Descripción</th>
+        <th class="text-md-center" style="width:15%; font-weight: 600">Serial</th>
+        <th class="text-md-center" style="width:10%; font-weight: 600">Activo Fijo</th>
+        <th class="text-md-center" style="width:10%; font-weight: 600">Estado</th>
+        <th class="text-md-center" style="width:15%; font-weight: 600">Acciones</th>
+    {% endif %}
 {% endblock %}
 
 {% block rows %}

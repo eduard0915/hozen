@@ -141,6 +141,7 @@ class EquipmentUpdateView(LoginRequiredMixin, ValidatePermissionRequiredMixin, U
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context['equip'] = Equipment.objects.get(pk=self.kwargs.get('pk'))
         context['title'] = 'Edición de Equipo'
         context['list_url'] = self.success_url
         context['action'] = 'edit'
@@ -416,3 +417,119 @@ class EquipmentDetailPdfView(LoginRequiredMixin, ValidatePermissionRequiredMixin
     #         return Company.objects.get(id=1).get_logo()
     #     except Exception:
     #         return '{}{}'.format(STATIC_URL, 'img/empty.png')
+
+
+# Registro de equipo marca modelo
+class EquipmentMarkModelCreateView(LoginRequiredMixin, ValidatePermissionRequiredMixin, CreateView):
+    model = EquipmentMarkModel
+    form_class = EquipmentMarkModelForm
+    template_name = 'create_equipment_mark_model.html'
+    success_url = reverse_lazy('equipment:list_equipment_mark_model')
+    permission_required = 'equipment.add_equipment'
+    url_redirect = success_url
+
+    @method_decorator(csrf_exempt)
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        data = {}
+        try:
+            action = request.POST['action']
+            if action == 'add':
+                form = self.get_form()
+                if form.is_valid():
+                    form.save()
+                    messages.success(request, f'Equipo creado satisfactoriamente!')
+                else:
+                    messages.error(request, form.errors)
+            else:
+                data['error'] = 'No ha ingresado datos en los campos'
+        except Exception as e:
+            data['error'] = str(e)
+        return JsonResponse(data)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Creación de Marca y Modelo de Equipos'
+        context['list_url'] = self.success_url
+        context['action'] = 'add'
+        context['entity'] = 'Creación de Marca y Modelo de Equipo'
+        context['div'] = '12'
+        context['act'] = reverse_lazy('equipment:create_equipment_mark_model')
+        return context
+
+
+# Listado de Equipos marca modelo
+class EquipmentMarkModelListView(LoginRequiredMixin, ValidatePermissionRequiredMixin, ListView):
+    model = EquipmentMarkModel
+    template_name = 'list_equipment.html'
+    permission_required = 'equipment.view_equipment'
+
+    @method_decorator(csrf_exempt)
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        data = {}
+        try:
+            action = request.POST['action']
+            if action == 'searchdata':
+                data = []
+                equip = list(EquipmentMarkModel.objects.values('description', 'mark', 'model', 'maker', 'id').order_by('-id'))
+                return JsonResponse(equip, safe=False)
+            else:
+                data['error'] = 'Ha ocurrido un error'
+        except Exception as e:
+            data['error'] = str(e)
+        return JsonResponse(data, safe=False)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Marcas Modelos de Equipos'
+        context['create_url'] = reverse_lazy('equipment:create_equipment_mark_model')
+        context['entity'] = 'Marcas y Modelos de Equipos'
+        return context
+
+
+# Equipo fuera de servicio
+class EquipmentMarkModelUpdateView(LoginRequiredMixin, ValidatePermissionRequiredMixin, UpdateView):
+    model = EquipmentMarkModel
+    form_class = EquipmentMarkModelForm
+    template_name = 'update_equipment_mark_model.html'
+    success_url = reverse_lazy('equipment:list_equipment_mark_model')
+    permission_required = 'equipment.change_equipment'
+    url_redirect = success_url
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.method = None
+
+    def dispatch(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        return super().dispatch(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        data = {}
+        try:
+            action = request.POST['action']
+            if action == 'edit':
+                form = self.get_form()
+                if form.is_valid():
+                    form.save()
+                else:
+                    messages.error(request, form.errors)
+            else:
+                data['error'] = 'No ha ingresado datos en los campos'
+        except Exception as e:
+            data['error'] = str(e)
+        return JsonResponse(data)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        equipment = EquipmentMarkModel.objects.get(pk=self.kwargs.get('pk'))
+        context['list_url'] = self.success_url
+        context['action'] = 'edit'
+        context['entity'] = 'Edición de Marca y Modelo de Equipo'
+        context['act'] = reverse_lazy('equipment:update_equipment_mark_model', kwargs={'pk': equipment.id})
+        return context

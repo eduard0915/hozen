@@ -16,6 +16,9 @@ urlpatterns = [
     path('inactive/<int:pk>/', EquipmentInactiveView.as_view(), name='inactive_equipment'),
     path('active/<int:pk>/', EquipmentActiveView.as_view(), name='active_equipment'),
     path('download/<int:pk>/', EquipmentDetailPdfView.as_view(), name='pdf_equipment'),
+    path('mark_model/add/', EquipmentMarkModelCreateView.as_view(), name='create_equipment_mark_model'),
+    path('mark_model/list/', EquipmentMarkModelListView.as_view(), name='list_equipment_mark_model'),
+    path('mark_model/update/<int:pk>/', EquipmentMarkModelUpdateView.as_view(), name='update_equipment_mark_model'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL,
