@@ -32,10 +32,15 @@ class AcademicTraining(BaseModel):
     academic_institution = models.CharField(max_length=200, verbose_name='Institución Académica')
     date_graduation = models.DateField(verbose_name='Fecha de Graduación', null=True, blank=True)
     file_diploma = models.FileField(upload_to='file_diploma/%Y%m%d', verbose_name='Diploma')
-    user = models.ForeignKey(User, verbose_name='', on_delete=models.CASCADE)
+    user = models.ForeignKey(User, verbose_name='', on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
         return self.academic_title
+
+    class Meta:
+        db_table = 'AcademicTraining'
+        verbose_name = 'AcademicTraining'
+        verbose_name_plural = 'AcademicTrainings'
 
     def save(self, force_insert=False, force_update=False, using=None, update_fields=None, *args, **kwargs):
         user = get_current_user()

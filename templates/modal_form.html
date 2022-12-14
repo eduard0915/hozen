@@ -1,10 +1,10 @@
 {% load static %}
 
-    <style>
-        .datetimepicker {
-            z-index: 1600 !important; /* has to be larger than 1050 */
-        }
-    </style>
+{#    <style>#}
+{#        .datetimepicker {#}
+{#            z-index: 1600 !important; /* has to be larger than 1050 */#}
+{#        }#}
+{#    </style>#}
 
 <div class="modal-dialog modal-notice">
     <div class="modal-content">
@@ -96,8 +96,6 @@
             }).always(function (data) {
             });
         });
-
-        $('#id_user').val('{{ user.id }}');
 
         $('#date_graduation').datetimepicker({
             format: 'YYYY-MM-DD',

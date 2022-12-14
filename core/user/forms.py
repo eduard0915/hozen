@@ -32,6 +32,7 @@ class UserForm(ModelForm):
             'groups': SelectMultiple(attrs={'class': 'form-control', 'required': True})
         }
         exclude = ['user_permissions', 'last_login', 'date_joined', 'is_superuser', 'is_staff', 'is_active']
+
         help_texts = {
             'groups': 'Seleccione perfil del usuario',
             'username': 'Únicamente letras y/o números'
@@ -269,6 +270,7 @@ class UserPasswordUpdateForm(ModelForm):
 # Registro de formación académica
 class AcademicTrainingForm(ModelForm):
     def __init__(self, *args, **kwargs):
+        self.request = kwargs.pop("request")
         super().__init__(*args, **kwargs)
         for form in self.visible_fields():
             form.field.widget.attrs['autocomplete'] = 'off'
@@ -278,20 +280,18 @@ class AcademicTrainingForm(ModelForm):
         fields = [
             'academic_title',
             'academic_institution',
-            'date_graduation',
+            # 'date_graduation',
             'file_diploma',
-            'user',
         ]
         widgets = {
             'academic_title': TextInput(attrs={'class': 'form-control', 'required': True}),
             'academic_institution': TextInput(attrs={'class': 'form-control', 'required': True}),
-            'user': TextInput(attrs={'class': 'form-control', 'hidden': True}),
             'file_diploma': FileInput(),
-            'date_graduation': DateInput(format='%Y-%m-%d', attrs={
-                'id': 'date_graduation',
-                'class': 'form-control datepicker',
-                'required': True
-            })
+            # 'date_graduation': DateInput(format='%Y-%m-%d', attrs={
+            #     'id': 'date_graduation',
+            #     'class': 'form-control datepicker',
+            #     'required': True
+            # })
         }
 
     def save(self, commit=True):
@@ -299,7 +299,9 @@ class AcademicTrainingForm(ModelForm):
         form = super()
         try:
             if form.is_valid():
-                form.save()
+                data = form.save(commit=False)
+                data.user_id = self.request
+                data.save()
             else:
                 data['error'] = form.errors
         except Exception as e:

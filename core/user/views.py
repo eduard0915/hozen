@@ -245,7 +245,7 @@ class UserDetailView(LoginRequiredMixin, ValidatePermissionRequiredMixin, Detail
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['academic'] = AcademicTraining.objects.filter(user=self.request.user.id)
+        context['academic'] = AcademicTraining.objects.filter(user_id=self.kwargs.get('pk'))
         context['title'] = 'Perfil de Usuario'
         context['entity'] = 'Perfil de Usuario'
         return context
@@ -419,14 +419,9 @@ class AcademicTrainingCreateView(LoginRequiredMixin, ValidatePermissionRequiredM
         try:
             action = request.POST['action']
             if action == 'add':
-                form = self.form_class(data=request.POST)
+                form = self.get_form()
                 if form.is_valid():
                     form.save()
-                    # user = User.objects.get(pk=self.kwargs.get('pk'))
-                    # for data in form:
-                    #     dt = data.save(commit=False)
-                    #     dt.user_id = user.id
-                    #     dt.save()
                 else:
                     messages.error(request, form.errors)
             else:
@@ -434,6 +429,11 @@ class AcademicTrainingCreateView(LoginRequiredMixin, ValidatePermissionRequiredM
         except Exception as e:
             data['error'] = str(e)
         return JsonResponse(data)
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs.update({'request': self.kwargs.get('pk')})
+        return kwargs
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -475,7 +475,7 @@ class AcademicTrainingUpdateView(LoginRequiredMixin, ValidatePermissionRequiredM
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        user = User.objects.get(pk=self.kwargs.get('pk'))
+        user = AcademicTraining.objects.get(pk=self.kwargs.get('pk'))
         context['action'] = 'edit'
         context['entity'] = 'Edición de Registro de Formación Académica'
         context['act'] = reverse_lazy('user:academic_update', kwargs={'pk': user.id})
