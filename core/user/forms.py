@@ -280,18 +280,18 @@ class AcademicTrainingForm(ModelForm):
         fields = [
             'academic_title',
             'academic_institution',
-            # 'date_graduation',
+            'date_graduation',
             'file_diploma',
         ]
         widgets = {
             'academic_title': TextInput(attrs={'class': 'form-control', 'required': True}),
             'academic_institution': TextInput(attrs={'class': 'form-control', 'required': True}),
             'file_diploma': FileInput(),
-            # 'date_graduation': DateInput(format='%Y-%m-%d', attrs={
-            #     'id': 'date_graduation',
-            #     'class': 'form-control datepicker',
-            #     'required': True
-            # })
+            'date_graduation': DateInput(format='%Y-%m-%d', attrs={
+                'id': 'date_graduation',
+                'class': 'form-control datepicker',
+                'required': True
+            })
         }
 
     def save(self, commit=True):
